@@ -1,0 +1,20 @@
+{
+  "name": "@tecgbase-ui/core",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "prepack": "unbuild"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5"
+  },
+  "devDependencies": {
+    "@tabler/icons-react": "^3.5.0"
+  }
+}
