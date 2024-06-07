@@ -1,22 +1,23 @@
 {
-    "exclude": [
-      "node_modules"
-    ],
-    "compilerOptions": {
-      "target": "ES2015",
-      "lib": ["DOM", "ESNext"],
-      "module": "ESNext",
-      "moduleResolution": "Node",
-      "jsx": "react-jsx",
-      "resolveJsonModule": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "noEmitOnError": true,
-      "allowJs": true,
-      "strict": true,
-      "baseUrl": ".",
-      "paths": {
-        "@techbase-ui/*": ["./packages/@techbase-ui/*/src"],
-      }
-    }
+  "include": ["./packages/@simm/*/src"],
+  "exclude": [
+    "node_modules",
+    "./packages/@simm/*/esm/**/*",
+    "./packages/@simm/*/cjs/**/*",
+    "./packages/@simm/*/lib/**/*"
+  ],
+  "compilerOptions": {
+    "target": "ES2015",
+    "lib": ["DOM", "ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "allowJs": true,
+    "strict": true,
+    "baseUrl": "."
   }
+}

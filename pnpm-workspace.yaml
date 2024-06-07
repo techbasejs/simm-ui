@@ -1,2 +1,4 @@
 packages:
-  - "packages/@techbase-ui/**"
+  - "packages/@simm/*"
+  - "packages/@simmx/*"
+  - "apps/*"

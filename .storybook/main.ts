@@ -1,26 +1,20 @@
 export default {
-  stories: ['../packages/**/*.stories.@(ts|tsx)'],
+  stories: ["../packages/**/*.stories.@(ts|tsx)", "../packages/**/*.@(mdx)"],
   addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@chromatic-com/storybook'
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@chromatic-com/storybook",
   ],
 
-  framework: {
-    name: '@storybook/react-vite',
-    options: {}
-  },
+  framework: "@storybook/nextjs",
 
-  docs: {
-    autodocs: false,
-  },
+  docs: false,
 
   core: {
     disableTelemetry: true,
   },
 
-
   typescript: {
     reactDocgen: false,
-  }
+  },
 };

@@ -1,0 +1,67 @@
+import { Button } from "@simm/core";
+import { Demo, ButtonDemoBasic, ButtonDemoDisabled, ButtonDemoSizes, ButtonDemoVariants, ButtonDemoLoading, ButtonDemoIcon, ButtonDemoColors } from "@simmx/demo";
+ 
+# Button
+
+Buttons allow users to perform actions and choose with a single tap.
+
+## Usage
+
+### Basic
+
+<Demo data={ButtonDemoBasic} />
+
+### Disabled
+
+<Demo data={ButtonDemoDisabled} />
+
+### Sizes
+
+<Demo data={ButtonDemoSizes} />
+
+### Colors
+
+<Demo data={ButtonDemoColors} />
+
+### Variants
+
+<Demo data={ButtonDemoVariants} />
+
+### Loading
+
+<Demo data={ButtonDemoLoading} />
+
+### With Icons
+
+<Demo data={ButtonDemoIcon} />
+
+### Custom Styles
+
+### Button Group
+
+## Accessbility
+
+- Button has role of `button`
+- Keyboard event support for `Space` and `Enter` keys.
+
+## API
+
+### Button Props
+
+| Attribute        | Type                                                                         | Description                                                  | Default   |
+| ---------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------ | --------- |
+| children         | `ReactNode`                                                                  | The content to display in the button.                        | -         |
+| variant          | `solid` \| `bordered` \| `light` \| `flat` \| `faded` \| `shadow` \| `ghost` | The button appearance style.                                 | `solid`   |
+| color            | `default` \| `primary` \| `secondary` \| `success` \| `warning` \| `danger`  | The button color theme.                                      | `default` |
+| size             | `sm` \| `md` \| `lg`                                                         | The button size.                                             | `md`      |
+| radius           | `none` \| `sm` \| `md` \| `lg` \| `full`                                     | The button border radius.                                    | -         |
+| startContent     | `ReactNode`                                                                  | The button start content.                                    | -         |
+| endContent       | `ReactNode`                                                                  | The button end content.                                      | -         |
+| spinner          | `ReactNode`                                                                  | Spinner to display when loading.                             | -         |
+| spinnerPlacement | `start` \| `end`                                                             | The spinner placement.                                       | `start`   |
+| fullWidth        | `boolean`                                                                    | Whether the button should take the full width of its parent. | `false`   |
+| isIconOnly       | `boolean`                                                                    | Whether the button should have the same width and height.    | `false`   |
+| isDisabled       | `boolean`                                                                    | Whether the button is disabled.                              | `false`   |
+| isLoading        | `boolean`                                                                    | Whether the button is loading.                               | `false`   |
+| disableRipple    | `boolean`                                                                    | Whether the button should display a ripple effect on press.  | `false`   |
+| disableAnimation | `boolean`                                                                    | Whether the button should display animations.                | `false`   |

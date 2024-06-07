@@ -1,0 +1,43 @@
+{
+  "name": "@simmx/demo",
+  "version": "1.0.0",
+  "description": "The next framework for reactjs",
+  "main": "./cjs/index.cjs",
+  "module": "./esm/index.mjs",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.mts",
+        "default": "./esm/index.mjs"
+      },
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./cjs/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "cjs",
+    "esm",
+    "lib"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@simmx/code-highlighter": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "shiki": "^1.7.0"
+  },
+  "devDependencies": {
+    "@simm/core": "workspace:*",
+    "@simm/hooks": "workspace:*",
+    "@tabler/icons-react": "^3.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
