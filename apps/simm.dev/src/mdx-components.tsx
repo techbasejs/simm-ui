@@ -2,9 +2,12 @@ import { Box, useTheme } from "@simm/core";
 import type { MDXComponents } from "mdx/types";
 import React, {
   ButtonHTMLAttributes,
+  HTMLAttributes,
   TableHTMLAttributes,
   TdHTMLAttributes,
 } from "react";
+
+import { CodeHighlighter } from "@simmx/code-highlighter";
 
 const Table = ({ children }: TableHTMLAttributes<HTMLTableElement>) => {
   const theme = useTheme();
@@ -59,7 +62,7 @@ const Td = ({ children }: TdHTMLAttributes<HTMLElement>) => {
   );
 };
 
-const MdxParaph = ({ children }: TdHTMLAttributes<HTMLElement>) => {
+const MdxParaph = ({ children }: HTMLAttributes<HTMLElement>) => {
   return (
     <Box
       as="p"
@@ -72,12 +75,28 @@ const MdxParaph = ({ children }: TdHTMLAttributes<HTMLElement>) => {
   );
 };
 
+const MdxCode = ({ children, className }: HTMLAttributes<HTMLElement>) => {
+  const lang = className?.replace("language-", "") as string;
+  if (lang) {
+    return (
+      <CodeHighlighter
+        langs={[lang]}
+        code={children as string}
+        language={lang}
+      />
+    );
+  } else {
+    return <code>{children}</code>
+  }
+};
+
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     table: (props) => <Table {...props} />,
     th: (props) => <Th {...props} />,
     td: (props) => <Td {...props} />,
     p: (props) => <MdxParaph {...props} />,
+    code: (props) => <MdxCode {...props} />,
     ...components,
   };
 }

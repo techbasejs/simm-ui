@@ -126,7 +126,6 @@ const ButtonRoot = styled(
 
 const _Button = createPolymorphicComponent<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
-    console.log(props);
     const slots: string[] = [];
     if (props.variant) {
       slots.push(props.variant);

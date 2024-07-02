@@ -4,14 +4,15 @@ import { Box } from "@simm/core";
 type CodeHighlighterProps = {
   code: string;
   language?: string;
+  langs?: string[];
 };
 
-export const CodeHighlighter = ({ code, language }: CodeHighlighterProps) => {
+export const CodeHighlighter = ({ code, language, langs }: CodeHighlighterProps) => {
   const [html, setHtml] = useState("");
   useEffect(() => {
     const highlight = async () => {
       const highlighter = await createHighlighter({
-        langs: ["tsx", "css", "jsx", "html"],
+        langs: langs ? langs : ["tsx", "css", "jsx", "html"],
         themes: ["github-dark"],
       });
       const html = highlighter.codeToHtml(code.trim(), {
