@@ -1,5 +1,5 @@
 import { Button } from "@simm/core";
-import { Demo, CheckboxDemoBasic, CheckboxDemoDisabled } from "@simmx/demo";
+import { Demo, CheckboxDemoBasic, CheckboxDemoDisabled, CheckboxDemoSizes, CheckboxDemoColors } from "@simmx/demo";
  
 # Checkbox
 
@@ -17,43 +17,34 @@ Checkboxes allow users to select multiple items from a list of individual items,
 
 ### Sizes
 
-<Demo data={CheckboxDemoDisabled} />
+<Demo data={CheckboxDemoSizes} />
 
 ### Colors
 
-<Demo data={CheckboxDemoDisabled} />
-
-### Radius
-
-<Demo data={CheckboxDemoDisabled} />
+<Demo data={CheckboxDemoColors} />
 
 ### Indeterminate
 
-<Demo data={CheckboxDemoDisabled} />
+<Demo data={CheckboxDemoColors} />
 
 ## Accessbility
 
-- Button has role of `button`
-- Keyboard event support for `Space` and `Enter` keys.
+- Built with a native HTML `<input>` element.
+- Full support for browser features like form autofill.
+- Keyboard focus management and cross browser normalization.
 
 ## API
 
-### Button Props
+### Checkbox Props
 
 | Attribute        | Type                                                                         | Description                                                  | Default   |
 | ---------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------ | --------- |
-| children         | `ReactNode`                                                                  | The content to display in the button.                        | -         |
-| variant          | `solid` \| `bordered` \| `light` \| `flat` \| `faded` \| `shadow` \| `ghost` | The button appearance style.                                 | `solid`   |
-| color            | `default` \| `primary` \| `secondary` \| `success` \| `warning` \| `danger`  | The button color theme.                                      | `default` |
+| label            | `ReactNode`                                                                  | The label of checkbox.                                       | -         |
+| variant          | `filled` \| `outlined`                                                       | The button appearance style.                                 | `filled`  |
+| color            | `default` \| `primary` \| `success` \| `warning` \| `error`                  | The button color theme.                                      | `default` |
 | size             | `sm` \| `md` \| `lg`                                                         | The button size.                                             | `md`      |
-| radius           | `none` \| `sm` \| `md` \| `lg` \| `full`                                     | The button border radius.                                    | -         |
-| startContent     | `ReactNode`                                                                  | The button start content.                                    | -         |
-| endContent       | `ReactNode`                                                                  | The button end content.                                      | -         |
-| spinner          | `ReactNode`                                                                  | Spinner to display when loading.                             | -         |
-| spinnerPlacement | `start` \| `end`                                                             | The spinner placement.                                       | `start`   |
-| fullWidth        | `boolean`                                                                    | Whether the button should take the full width of its parent. | `false`   |
-| isIconOnly       | `boolean`                                                                    | Whether the button should have the same width and height.    | `false`   |
-| isDisabled       | `boolean`                                                                    | Whether the button is disabled.                              | `false`   |
-| isLoading        | `boolean`                                                                    | Whether the button is loading.                               | `false`   |
-| disableRipple    | `boolean`                                                                    | Whether the button should display a ripple effect on press.  | `false`   |
-| disableAnimation | `boolean`                                                                    | Whether the button should display animations.                | `false`   |
+| disabled         | `boolean`                                                                    | Whether the button is loading.                               | `false`   |
+
+### Checkbox Events
+
+Accept all events of `<input type="checkbox" />`

@@ -16,6 +16,8 @@ const CheckboxTransition = styled(Transition)({
   display: "flex",
 });
 
+export type CheckboxSizeType = "sm" | "md" | "lg";
+
 const CheckboxLabelStyled = styled.label<CheckboxProps>((props) => {
   const theme = useTheme();
   return {
@@ -23,36 +25,87 @@ const CheckboxLabelStyled = styled.label<CheckboxProps>((props) => {
     ...(props.labelposition === "left" && { flexDirection: "row-reverse" }),
     alignItems: "center",
     columnGap: "4px",
-    fontSize: "14px",
     boxSizing: "border-box",
     ...(props.disabled && { color: theme.pallete?.text?.disabled }),
+    ...getStylesBySize(props.size).wrapper,
   } as CSSObject;
 });
 
-const CheckboxCheckedStyled = styled(CheckboxTransition)(
-  () =>
-    ({
-      boxSizing: "border-box",
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "18px",
-      height: "18px",
-      justifyContent: "center",
-      alignItems: "center",
-    }) as CSSObject,
-);
+const CheckboxCheckedStyled = styled(CheckboxTransition)<CheckboxProps>(({
+  size,
+}) => {
+  return {
+    boxSizing: "border-box",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    ...getStylesBySize(size).root,
+  } as CSSObject;
+});
 
-const CheckboxInputWrapperStyled = styled.div(
-  () =>
-    ({
-      display: "inline-flex",
-      width: "18px",
-      height: "18px",
-      position: "relative",
-      boxSizing: "border-box",
-    }) as CSSObject,
-);
+const CheckboxInputWrapperStyled = styled.div<CheckboxProps>(({ size }) => {
+  return {
+    display: "inline-flex",
+    position: "relative",
+    boxSizing: "border-box",
+    ...getStylesBySize(size).root,
+  } as CSSObject;
+});
+
+const getStylesBySize = (
+  size?: CheckboxSizeType,
+): {
+  wrapper: CSSObject;
+  root: CSSObject;
+  icon: { size: number };
+} => {
+  switch (size) {
+    case "sm": {
+      return {
+        wrapper: {
+          fontSize: "0.75rem",
+        },
+        root: {
+          width: "1rem",
+          height: "1rem",
+        },
+        icon: {
+          size: 12,
+        },
+      };
+    }
+    case "lg": {
+      return {
+        wrapper: {
+          fontSize: "1rem",
+        },
+        root: {
+          width: "1.5rem",
+          height: "1.5rem",
+        },
+        icon: {
+          size: 20,
+        },
+      };
+    }
+    default: {
+      return {
+        wrapper: {
+          fontSize: "0.875rem",
+        },
+        root: {
+          width: "1.25rem",
+          height: "1.25rem",
+        },
+        icon: {
+          size: 16,
+        },
+      };
+    }
+  }
+};
 
 const CheckboxInputStyled = styled(Box)<CheckboxProps>((props) => {
   const theme = useTheme();
@@ -68,8 +121,6 @@ const CheckboxInputStyled = styled(Box)<CheckboxProps>((props) => {
     boxSizing: "border-box",
     border: `1px solid ${color}`,
     margin: 0,
-    width: "18px",
-    height: "18px",
     appearance: "none",
     borderRadius: "4px",
     transition: "background .2s",
@@ -84,16 +135,21 @@ const CheckboxInputStyled = styled(Box)<CheckboxProps>((props) => {
       border: "1px solid",
       borderColor: disabledColor,
     },
+    ...getStylesBySize(props.size).root,
   } as CSSObject;
 });
-export type CheckboxProps = {
+export type CheckboxProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "size"
+> & {
   label?: React.ReactNode;
   labelposition?: "left" | "right";
   color?: ColorType;
   variant?: "filled" | "outlined";
   radius?: number;
+  size?: CheckboxSizeType;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-} & InputHTMLAttributes<HTMLInputElement>;
+};
 
 type _CheckboxProps<C extends React.ElementType> =
   PolymorphicComponentPropWithRef<C> & CheckboxProps;
@@ -103,14 +159,12 @@ export const Checkbox = createPolymorphicComponent<
   _CheckboxProps<React.ElementType>
 >((props, ref) => {
   const { onChange, label, ...rest } = props;
-  const [opened, setOpened] = useState(rest.checked || false);
+  const [opened, setOpened] = useState(rest.checked || rest.defaultChecked || false);
   const theme = useTheme();
   const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e);
     setOpened(e.target.checked);
   };
-
-  const _color = theme.pallete?.[props.color || "primary"];
 
   const iconColor = useMemo(() => {
     if (rest.disabled) {
@@ -121,12 +175,15 @@ export const Checkbox = createPolymorphicComponent<
       : theme.pallete?.[rest.color || "primary"]?.main;
   }, [theme, rest.variant]);
 
+  const iconSize = getStylesBySize(props.size).icon;
+
   return (
     <CheckboxLabelStyled
       disabled={rest.disabled}
       labelposition={rest.labelposition}
+      size={rest.size}
     >
-      <CheckboxInputWrapperStyled>
+      <CheckboxInputWrapperStyled {...rest}>
         <CheckboxInputStyled
           ref={ref}
           as="input"
@@ -134,8 +191,8 @@ export const Checkbox = createPolymorphicComponent<
           onChange={onCheckboxChange}
           {...rest}
         />
-        <CheckboxCheckedStyled opened={opened} transition="scale">
-          <IconCheck color={iconColor} size={14} />
+        <CheckboxCheckedStyled opened={opened} transition="scale" {...rest}>
+          <IconCheck color={iconColor} {...iconSize} />
         </CheckboxCheckedStyled>
       </CheckboxInputWrapperStyled>
       {label}

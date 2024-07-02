@@ -11,7 +11,10 @@ export function Default() {
   return (
     <Stack spacing={20}>
       <Stack direction="row">
-        <Checkbox disabled label="Checkbox input" />
+        <Checkbox size="sm" defaultChecked label="Checkbox input" />
+        <Checkbox size="md" label="Checkbox input" />
+        <Checkbox size="lg" label="Checkbox input" />
+
       </Stack>
       <Stack direction="row">
         <Checkbox

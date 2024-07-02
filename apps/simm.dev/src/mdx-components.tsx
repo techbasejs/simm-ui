@@ -59,11 +59,25 @@ const Td = ({ children }: TdHTMLAttributes<HTMLElement>) => {
   );
 };
 
+const MdxParaph = ({ children }: TdHTMLAttributes<HTMLElement>) => {
+  return (
+    <Box
+      as="p"
+      sx={{
+        marginTop: 0,
+      }}
+    >
+      {children}
+    </Box>
+  );
+};
+
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     table: (props) => <Table {...props} />,
     th: (props) => <Th {...props} />,
     td: (props) => <Td {...props} />,
+    p: (props) => <MdxParaph {...props} />,
     ...components,
   };
 }

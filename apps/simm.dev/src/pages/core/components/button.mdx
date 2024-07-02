@@ -51,17 +51,15 @@ Buttons allow users to perform actions and choose with a single tap.
 | Attribute        | Type                                                                         | Description                                                  | Default   |
 | ---------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------ | --------- |
 | children         | `ReactNode`                                                                  | The content to display in the button.                        | -         |
-| variant          | `solid` \| `bordered` \| `light` \| `flat` \| `faded` \| `shadow` \| `ghost` | The button appearance style.                                 | `solid`   |
-| color            | `default` \| `primary` \| `secondary` \| `success` \| `warning` \| `danger`  | The button color theme.                                      | `default` |
+| variant          | `filled` \| `outlined` \| `transparent` \| `white`                           | The button appearance style.                                 | `filled`   |
+| color            | `default` \| `primary` \| `success` \| `warning` \| `error`                  | The button color theme.                                      | `default` |
 | size             | `sm` \| `md` \| `lg`                                                         | The button size.                                             | `md`      |
-| radius           | `none` \| `sm` \| `md` \| `lg` \| `full`                                     | The button border radius.                                    | -         |
 | startContent     | `ReactNode`                                                                  | The button start content.                                    | -         |
 | endContent       | `ReactNode`                                                                  | The button end content.                                      | -         |
-| spinner          | `ReactNode`                                                                  | Spinner to display when loading.                             | -         |
-| spinnerPlacement | `start` \| `end`                                                             | The spinner placement.                                       | `start`   |
 | fullWidth        | `boolean`                                                                    | Whether the button should take the full width of its parent. | `false`   |
-| isIconOnly       | `boolean`                                                                    | Whether the button should have the same width and height.    | `false`   |
-| isDisabled       | `boolean`                                                                    | Whether the button is disabled.                              | `false`   |
-| isLoading        | `boolean`                                                                    | Whether the button is loading.                               | `false`   |
-| disableRipple    | `boolean`                                                                    | Whether the button should display a ripple effect on press.  | `false`   |
-| disableAnimation | `boolean`                                                                    | Whether the button should display animations.                | `false`   |
+| loading          | `boolean`                                                                    | Whether the button is disabled.                              | `false`   |
+| disabled         | `boolean`                                                                    | Whether the button is loading.                               | `false`   |
+
+### Button Events
+
+Accept all events of native button

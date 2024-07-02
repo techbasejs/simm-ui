@@ -6,12 +6,12 @@ import { Checkbox } from "@simm/core";
 
 function Demo() {
   return (
-    <Checkbox label="checkbox" />
+    <Checkbox label="Checkbox" />
   );
 }`;
 
 function Demo() {
-  return <Checkbox label="checkbox" />;
+  return <Checkbox label="Checkbox" />;
 }
 
 export const CheckboxDemoBasic: SimmDemo = {
