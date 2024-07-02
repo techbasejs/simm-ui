@@ -37,7 +37,7 @@ Build all packages
 pnpm build all
 ```
 
-Run a storybook
+Run storybook
 
 ```sh
 pnpm storybook

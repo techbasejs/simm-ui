@@ -2,7 +2,7 @@ import { renderDemo } from "../../render-demo";
 import { CheckboxDemoBasic } from "./Checkbox.demo.basic";
 
 export default {
-  title: "Input/Checkbox",
+  title: "Form/Checkbox",
 };
 
 export const CheckboxBasic = {

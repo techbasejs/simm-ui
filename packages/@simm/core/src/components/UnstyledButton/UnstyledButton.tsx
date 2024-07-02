@@ -70,14 +70,16 @@ export const UnstyledButton = createPolymorphicComponent<
   UnstyledButtonProps
 >((props, ref) => {
   const theme = useTheme();
-  const { children, prefixIcon, suffixIcon, loading, ...rest } = props;
-  console.log(prefixIcon);
+  const { children, prefixIcon, suffixIcon, loading, disabled, ...rest } =
+    props;
   return (
     <ButtonRoot
       as="button"
       theme={theme}
-      disabled={loading}
+      disabled={loading || disabled}
       ref={ref}
+      {...(loading && { "data-loading": true })}
+      {...(disabled && { "data-disabled": true })}
       {...rest}
     >
       {prefixIcon && <IconWrapper>{prefixIcon}</IconWrapper>}
