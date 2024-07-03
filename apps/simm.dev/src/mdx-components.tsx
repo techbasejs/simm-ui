@@ -77,6 +77,8 @@ const MdxParaph = ({ children }: HTMLAttributes<HTMLElement>) => {
 
 const MdxCode = ({ children, className }: HTMLAttributes<HTMLElement>) => {
   const lang = className?.replace("language-", "") as string;
+  const theme = useTheme();
+  console.log(theme);
   if (lang) {
     return (
       <CodeHighlighter
@@ -86,7 +88,16 @@ const MdxCode = ({ children, className }: HTMLAttributes<HTMLElement>) => {
       />
     );
   } else {
-    return <code>{children}</code>;
+    return (
+      <Box
+        as="code"
+        sx={{
+          color: theme.pallete?.error?.main,
+        }}
+      >
+        {children}
+      </Box>
+    );
   }
 };
 

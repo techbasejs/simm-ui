@@ -1,1 +1,25 @@
+import { Demo, StackDemoBasic, StackDemoDirection } from '@simmx/demo'
+
 # Stack
+
+The stack component manages the layouts.
+
+## Usage
+
+### Basic
+
+<Demo data={StackDemoBasic} />
+
+### Direction
+
+<Demo data={StackDemoDirection} />
+
+## API
+
+### Stack Props
+
+| Attribute    | Type                                                        | Description                                                  | Default   |
+| ------------ | ----------------------------------------------------------- | ------------------------------------------------------------ | --------- |
+| children     | `ReactNode`                                                 | The content to display in the button.                        | -         |
+| direction    | `column` \| `row` \| `column-reserve` \| `row-reserve`      | The direction of stack                                       | `column`  |
+| spacing      | `number` or `string`                                        | `row-gap` or `column-gap` of flex layout.                    | -         |
