@@ -50,7 +50,7 @@ export const ModalBody = ({ children }: ModalBodyProps) => {
   const descriptionId = useId();
   return (
     <FloatingPortal>
-      <Transition opened={context.opened}>
+      <Transition opened={context.opened} exitDelay={350} transition="fade">
         <ModalOverlaystyled lockScroll>
           <FloatingFocusManager
             context={context.floatingContext as FloatingContext}

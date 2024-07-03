@@ -4,6 +4,7 @@ import { HTMLAttributes, useState } from "react";
 import { useTheme } from "../../theme/useTheme";
 import { ColorType } from "../../types/types";
 import { createPolymorphicComponent } from "../Box";
+import { Transition } from "../Transition";
 
 const ChipWrapperStyled = styled.label<{
   color?: ColorType;
@@ -18,7 +19,7 @@ const ChipWrapperStyled = styled.label<{
       backgroundColor: theme.pallete?.[color || "primary"]?.main,
       color: theme.pallete?.[color || "primary"]?.constrastText,
       ...(!autoSize && {
-        padding: "6px 10px",
+        padding: "6px 12px",
       }),
     }),
     borderRadius: 16,
@@ -30,19 +31,21 @@ const ChipWrapperStyled = styled.label<{
     userSelect: "none",
     height: 28,
     boxSizing: "border-box",
-    svg: {
-      display: "none",
-    },
+    transition: "background 350ms"
   };
 });
 
 const ChipInputStyled = styled.input({
   display: "none",
   ":checked ~ span": {},
-  ":checked ~ svg": {
-    display: "block",
-  },
 });
+
+const ChipTransitionStyled = styled(Transition)<{ width: number | string }>(
+  ({ width }) => ({
+    display: "flex",
+    width: width,
+  }),
+);
 
 const ChipInputContentStyled = styled.span({});
 
@@ -68,7 +71,13 @@ export const Chip = createPolymorphicComponent<HTMLInputElement, ChipProps>(
           type="checkbox"
           onChange={_onChange}
         />
-        <IconCheck size={16} />
+        <ChipTransitionStyled
+          width={checked ? "auto" : 0}
+          opened={checked}
+          transition="scale"
+        >
+          <IconCheck size={16} />
+        </ChipTransitionStyled>
         <ChipInputContentStyled {...rest}>{children}</ChipInputContentStyled>
       </ChipWrapperStyled>
     );

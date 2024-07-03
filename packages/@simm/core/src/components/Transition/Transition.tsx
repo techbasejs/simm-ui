@@ -8,6 +8,7 @@ export interface TransitionProps {
   transition?: MantineTransitionName;
   duration?: number;
   exit?: boolean;
+  exitDelay?: number;
 }
 
 const TransistionStyled = styled.div<Omit<TransitionProps, "children">>(
@@ -59,7 +60,7 @@ const TransistionStyled = styled.div<Omit<TransitionProps, "children">>(
 );
 
 export const Transition = React.forwardRef(function Transition(
-  { children, opened, ...rest }: TransitionProps,
+  { children, opened, exitDelay, ...rest }: TransitionProps,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   const [exit, setExit] = useState(false);
@@ -67,7 +68,7 @@ export const Transition = React.forwardRef(function Transition(
     if (!opened) {
       setTimeout(() => {
         setExit(false);
-      }, 200);
+      }, exitDelay || 0);
     } else {
       setTimeout(() => {
         setExit(true);

@@ -27,7 +27,7 @@ const PopoverDropdown = ({ children }: PopoverDropdownProps) => {
   const context = usePopoverContext();
   const theme = useTheme();
   return (
-    <Transition opened={context.opened}>
+    <Transition opened={context.opened} exitDelay={350}>
       <>
         <FloatingFocusManager
           context={context.floatingContext as FloatingContext}

@@ -80,7 +80,7 @@ export const Tooltip = createPolymorphicComponent<HTMLDivElement, TooltipProps>(
       <>
         {cloneComponent}
         <FloatingPortal>
-          <TooltipTransition opened={isOpen}>
+          <TooltipTransition opened={isOpen} exitDelay={350}>
             <TooltipRootStyled
               ref={refs.setFloating}
               style={{ ...floatingStyles }}
