@@ -14,7 +14,6 @@ export function Default() {
         <Checkbox size="sm" defaultChecked label="Checkbox input" />
         <Checkbox size="md" label="Checkbox input" />
         <Checkbox size="lg" label="Checkbox input" />
-
       </Stack>
       <Stack direction="row">
         <Checkbox

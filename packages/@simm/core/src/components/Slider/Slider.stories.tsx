@@ -1,4 +1,6 @@
-import { Stack } from "../Stack/Stack";
+import { useState } from "react";
+import { Stack } from "../Stack";
+import { Slider } from "./Slider";
 
 export default {
   title: "Form/Slider",
@@ -6,5 +8,14 @@ export default {
 };
 
 export function Default() {
-  return <Stack>Slider</Stack>;
+  const [sliderValue, setSliderValue] = useState(0);
+  const onSliderChange = (value: number) => {
+    setSliderValue(value);
+  };
+  return (
+    <Stack>
+      <Slider onChange={onSliderChange} />
+      <Stack mt={10}>{sliderValue}</Stack>
+    </Stack>
+  );
 }

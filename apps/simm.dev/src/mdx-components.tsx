@@ -9,7 +9,7 @@ import React, {
 
 import { CodeHighlighter } from "@simmx/code-highlighter";
 
-const Table = ({ children }: TableHTMLAttributes<HTMLTableElement>) => {
+const MdxTable = ({ children }: TableHTMLAttributes<HTMLTableElement>) => {
   const theme = useTheme();
   return (
     <Box
@@ -26,7 +26,7 @@ const Table = ({ children }: TableHTMLAttributes<HTMLTableElement>) => {
   );
 };
 
-const Th = ({ children }: TdHTMLAttributes<HTMLElement>) => {
+const MdxTh = ({ children }: TdHTMLAttributes<HTMLElement>) => {
   const theme = useTheme();
 
   return (
@@ -44,7 +44,7 @@ const Th = ({ children }: TdHTMLAttributes<HTMLElement>) => {
   );
 };
 
-const Td = ({ children }: TdHTMLAttributes<HTMLElement>) => {
+const MdxTd = ({ children }: TdHTMLAttributes<HTMLElement>) => {
   const theme = useTheme();
 
   return (
@@ -86,15 +86,15 @@ const MdxCode = ({ children, className }: HTMLAttributes<HTMLElement>) => {
       />
     );
   } else {
-    return <code>{children}</code>
+    return <code>{children}</code>;
   }
 };
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    table: (props) => <Table {...props} />,
-    th: (props) => <Th {...props} />,
-    td: (props) => <Td {...props} />,
+    table: (props) => <MdxTable {...props} />,
+    th: (props) => <MdxTh {...props} />,
+    td: (props) => <MdxTd {...props} />,
     p: (props) => <MdxParaph {...props} />,
     code: (props) => <MdxCode {...props} />,
     ...components,

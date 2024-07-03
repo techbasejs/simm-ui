@@ -25,11 +25,11 @@ const items: MenuItemType[] = [
     children: [
       {
         label: "Installation",
-        href: "/getting-started/installation"
+        href: "/getting-started/installation",
       },
       {
         label: "Usage",
-        href: "/getting-started/usage"
+        href: "/getting-started/usage",
       },
     ],
   },

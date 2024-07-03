@@ -4,10 +4,10 @@ import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
 const prompt1 = PromptTemplate.fromTemplate(
-  `What is the city {person} is from? Only respond with the name of the city.`
+  `What is the city {person} is from? Only respond with the name of the city.`,
 );
 const prompt2 = PromptTemplate.fromTemplate(
-  `What country is the city {city} in? Respond in {language}.`
+  `What country is the city {city} in? Respond in {language}.`,
 );
 
 const chatModel = new ChatOpenAI({

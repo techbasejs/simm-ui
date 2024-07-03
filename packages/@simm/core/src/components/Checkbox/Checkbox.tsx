@@ -159,7 +159,9 @@ export const Checkbox = createPolymorphicComponent<
   _CheckboxProps<React.ElementType>
 >((props, ref) => {
   const { onChange, label, ...rest } = props;
-  const [opened, setOpened] = useState(rest.checked || rest.defaultChecked || false);
+  const [opened, setOpened] = useState(
+    rest.checked || rest.defaultChecked || false,
+  );
   const theme = useTheme();
   const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e);

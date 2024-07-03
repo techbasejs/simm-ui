@@ -6,8 +6,7 @@ export type LinkProps = {
 
 export const Link = createPolymorphicComponent<HTMLDivElement, LinkProps>(
   ({ as, children, to, ...rest }, ref) => {
-    const navigateTo = () => {
-    };
+    const navigateTo = () => {};
     return (
       <Box as={as || "a"} onClick={navigateTo}>
         {children}
