@@ -1,6 +1,6 @@
 import { Stack, Tooltip, UnstyledButton, useTheme } from "@simm/core";
 import { useCopyToClipboard, useTimeout } from "@simm/hooks";
-import { CodeHighlighterTabs, CodeHighlighter } from "@simmx/code-highlighter";
+import { CodeHighlighter } from "@simmx/code-highlighter";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { useState } from "react";
 
@@ -16,14 +16,17 @@ export function renderDemo(demo: SimmDemo) {
   return () => {
     const theme = useTheme();
     const [isCopy, setIsCopy] = useState(false);
+    const [tooltipLabel, setTooltipLabel] = useState("Copy code");
     const [_, copy] = useCopyToClipboard();
     const { start } = useTimeout(() => {
       setIsCopy(false);
+      setTooltipLabel("Copy code");
     }, 1000);
 
     const handleCopy = () => {
       setIsCopy(true);
       copy(demo.code);
+      setTooltipLabel("Code copied");
       start();
     };
     return (
@@ -58,7 +61,7 @@ export function renderDemo(demo: SimmDemo) {
             borderColor: theme.shape?.borderColor,
           }}
         >
-          <Tooltip label="Copy code">
+          <Tooltip label={tooltipLabel}>
             <UnstyledButton onClick={handleCopy}>
               {!isCopy ? <IconCopy size={18} /> : <IconCheck size={18} />}
             </UnstyledButton>
