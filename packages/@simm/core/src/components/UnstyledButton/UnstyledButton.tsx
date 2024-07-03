@@ -20,7 +20,7 @@ export type UnstyledButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const ButtonRoot = styled(Box, {
   shouldForwardProp: isPropValid,
-})<UnstyledButtonProps>(() => {
+})<UnstyledButtonProps>((props) => {
   const theme = useTheme();
   return {
     color: theme.typography?.color,
@@ -34,8 +34,9 @@ const ButtonRoot = styled(Box, {
     fontSize: 16,
     lineHeight: "15px",
     padding: "0",
-    height: "34px",
-    transition: "background .25s",
+    height: "2.125rem",
+    transitionDuration: ".25s",
+    transitionProperty: "background",
     outline: "none",
     cursor: "pointer",
   };
