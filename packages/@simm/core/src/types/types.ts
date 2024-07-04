@@ -10,6 +10,7 @@ export type ColorType =
   | "secondary"
   | "success"
   | "warning"
+  | "info"
   // | "danger"
   | "error";
 
