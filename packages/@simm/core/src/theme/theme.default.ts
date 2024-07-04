@@ -54,6 +54,12 @@ export const themeDefault: UseThemeProps = {
       light: colors.yellow[500],
       constrastText: colors.base.white,
     },
+    info: {
+      main: colors.blue[600],
+      dark: colors.blue[700],
+      light: colors.blue[500],
+      constrastText: colors.base.white,
+    },
   },
   components: {
     Button: {
