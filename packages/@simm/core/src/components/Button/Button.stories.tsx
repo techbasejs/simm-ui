@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { IconButton } from "../IconButton/IconButton";
 import { Stack } from "../Stack/Stack";
 import { Title } from "../Title";
@@ -10,11 +11,20 @@ export default {
 };
 
 export function Default() {
+  const [loading, setLoading] = useState(false);
+  const handleClick = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  };
   return (
     <Stack spacing={20}>
       <Title>Variants</Title>
       <Stack direction="row" spacing={10}>
-        <Button>filled</Button>
+        <Button onClick={handleClick} loading={loading}>
+          filled
+        </Button>
         <Button variant="outlined">outlined</Button>
         <Button variant="transparent">transparent</Button>
         <Button variant="white">white</Button>

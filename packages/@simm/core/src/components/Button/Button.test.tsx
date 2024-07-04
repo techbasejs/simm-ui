@@ -10,5 +10,5 @@ describe("@simm/core/Button", () => {
   test("Sets data-loading attribute when loading prop is set to true", () => {
     render(<Button variant="filled">Button</Button>);
     expect(screen.getByText("Button")).toBeDefined();
-  })
+  });
 });

@@ -7,7 +7,11 @@ type CodeHighlighterProps = {
   langs?: string[];
 };
 
-export const CodeHighlighter = ({ code, language, langs }: CodeHighlighterProps) => {
+export const CodeHighlighter = ({
+  code,
+  language,
+  langs,
+}: CodeHighlighterProps) => {
   const [html, setHtml] = useState("");
   useEffect(() => {
     const highlight = async () => {

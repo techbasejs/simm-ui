@@ -247,6 +247,9 @@ importers:
       '@floating-ui/react':
         specifier: ^0.26.17
         version: 0.26.17(react-dom@18.3.1)(react@18.3.1)
+      '@simm/hooks':
+        specifier: workspace:*
+        version: link:../hooks
       '@simm/theme':
         specifier: workspace:*
         version: link:../theme

@@ -139,7 +139,7 @@ const _Radio = createPolymorphicComponent<HTMLInputElement, RadioProps>(
             defaultChecked={defaultChecked}
             {...rest}
           />
-          <RadioCheckedStyled opened={opened} transition="fade">
+          <RadioCheckedStyled opened={opened} transition="scale">
             <IconCircleFilled color={iconColor} size={8} />
           </RadioCheckedStyled>
         </RadioInputWrapperStyled>
