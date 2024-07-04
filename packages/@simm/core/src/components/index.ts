@@ -18,4 +18,5 @@ export * from "./AppShell";
 export * from "./UnstyledButton";
 export * from "./Tooltip";
 export * from "./Menu";
-export * from './Slider';
+export * from "./Slider";
+export * from "./Alert";
