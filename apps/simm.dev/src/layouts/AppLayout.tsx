@@ -37,6 +37,10 @@ const items: MenuItemType[] = [
     label: "Components",
     children: [
       {
+        href: "/core/components/alert",
+        label: "Alert",
+      },
+      {
         href: "#yyyy",
         label: "Avatar",
       },
