@@ -3,6 +3,7 @@ import React from "react";
 import { BoxExtraProps, createPolymorphicComponent } from "../Box";
 import { useTheme } from "../../theme";
 import { Stack } from "../Stack";
+import { ColorType } from "../../types/types";
 
 export type DividerOrientationType = "horizontal" | "vertical";
 export type DividerSizeType = "xs" | "sm" | "md" | "lg" | "xl";
@@ -12,7 +13,7 @@ export type DividerProps = React.HTMLAttributes<HTMLDivElement> & {
   orientation?: DividerOrientationType;
   textAlign?: DividerTextAlignType;
   size?: DividerSizeType;
-  color?: React.CSSProperties["color"];
+  color?: ColorType | React.CSSProperties["color"];
   borderStyle?: React.CSSProperties["borderStyle"];
 } & BoxExtraProps;
 
@@ -43,14 +44,20 @@ const DividerRoot = styled(Stack)<DividerProps>((props) => {
   const theme = useTheme();
   const {
     borderStyle = "solid",
-    color = theme.pallete?.divider,
+    color,
     orientation = "horizontal",
     textAlign = "center",
     children,
     size,
   } = props;
   const borderWidth = getDividerStylesBySize(size);
-  const border = `${borderWidth} ${borderStyle} ${color}`;
+  let DividerColor: ColorType | React.CSSProperties["color"] = color
+    ? color
+    : theme.pallete?.divider;
+  if (color && theme.pallete?.[color as ColorType]) {
+    DividerColor = theme.pallete?.[color as ColorType]?.main;
+  }
+  const border = `${borderWidth} ${borderStyle} ${DividerColor}`;
 
   const dividerStyles: CSSObject = {
     borderWidth: 0,
