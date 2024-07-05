@@ -11,13 +11,13 @@ export type DividerTextAlignType = "center" | "right" | "left";
 
 export type DividerProps = React.HTMLAttributes<HTMLDivElement> & {
   orientation?: DividerOrientationType;
-  label?: string | React.ReactNode;
+  label?: React.ReactNode;
   labelPosition?: DividerTextAlignType;
   size?: DividerSizeType;
   color?: ColorType;
 } & BoxExtraProps;
 
-const getDividerStylesBySize = (
+const getDividerWidthBySize = (
   size?: DividerSizeType,
 ): CSSObject["borderWidth"] => {
   switch (size) {
@@ -49,7 +49,7 @@ const DividerRoot = styled(Stack)<DividerProps>((props) => {
     label,
     size,
   } = props;
-  const borderWidth = getDividerStylesBySize(size);
+  const borderWidth = getDividerWidthBySize(size);
   const dividerColor = color
     ? theme.pallete?.[color]?.main
     : theme.pallete?.divider;

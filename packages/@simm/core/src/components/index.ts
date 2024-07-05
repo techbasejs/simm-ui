@@ -20,3 +20,4 @@ export * from "./Tooltip";
 export * from "./Menu";
 export * from "./Slider";
 export * from "./Alert";
+export * from "./Divider";
