@@ -1,44 +1,67 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Stack } from "../Stack";
-import styled from "@emotion/styled";
+import styled, { CSSObject } from "@emotion/styled";
 import { useTheme } from "../../theme";
 
 const SliderTrackStyled = styled.div((props) => {
   const theme = useTheme();
   return {
     position: "relative",
-    backgroundColor: "#e9ecef",
-    borderRadius: 9,
-  };
-});
-
-const SliderBarStyled = styled.div((props) => {
-  const theme = useTheme();
-
-  return {
     height: 10,
-    backgroundColor: theme.pallete?.primary?.main,
-    borderRadius: 9,
-    width: 0,
-  };
+    "::before": {
+      display: "block",
+      content: "''",
+      backgroundColor: "#e9ecef",
+      width: "calc(100% + 18px)",
+      height: 10,
+      // position: "absolute",
+      // left: 0,
+      // top: 0,
+      borderRadius: 9,
+      // zIndex: 1,
+    },
+  } as CSSObject;
 });
 
-const SliderThumbStyled = styled.div((props) => {
-  const theme = useTheme();
-  return {
-    width: 18,
-    height: 18,
-    top: -4,
-    left: 0,
-    boxSizing: "border-box",
-    position: "absolute",
-    backgroundColor: "#fff",
-    borderRadius: 9,
-    zIndex: 999,
-    border: "4px solid",
-    borderColor: theme.pallete?.primary?.main,
-  };
-});
+const SliderBarStyled = styled.div<{ withTransition: boolean }>(
+  ({ withTransition }) => {
+    const theme = useTheme();
+
+    return {
+      height: 10,
+      position: "absolute",
+      left: 0,
+      top: 0,
+      zIndex: 2,
+      backgroundColor: theme.pallete?.primary?.main,
+      borderRadius: 9,
+      width: 0,
+      ...(withTransition && { transition: "width .2s" }),
+    };
+  },
+);
+
+const SliderThumbStyled = styled.div<{ withTransition: boolean }>(
+  ({ withTransition }) => {
+    const theme = useTheme();
+    return {
+      width: 18,
+      height: 18,
+      top: -4,
+      left: 0,
+      boxSizing: "border-box",
+      position: "absolute",
+      backgroundColor: "#fff",
+      borderRadius: 9,
+      zIndex: 999,
+      border: "4px solid",
+      borderColor: theme.pallete?.primary?.main,
+      ...(withTransition && { transition: "left .2s" }),
+    };
+  },
+);
+
+type TrackStatusType = "NOT_STARTED" | "STARTED" | "PROGRESS" | "ENDED";
 
 export type SliderProps = {
   value?: number;
@@ -50,7 +73,22 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
-  const percentage = useRef(0);
+  const [withTransition, setWithTransition] = useState(true);
+  const [percentage, setPercentage] = useState(0);
+  const [trackStatus, setTrackStatus] =
+    useState<TrackStatusType>("NOT_STARTED");
+
+  useEffect(() => {
+    if (trackStatus) {
+      if (trackStatus === "ENDED") {
+        onChangeEnd?.(percentage);
+      }
+    }
+  }, [trackStatus, percentage]);
+
+  useEffect(() => {
+    onChange?.(percentage);
+  }, [percentage]);
 
   const calculateLeft = (x: number) => {
     const trackRect = trackRef.current?.getBoundingClientRect() as DOMRect;
@@ -61,14 +99,14 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
         left = 0;
       }
 
-      if (left > trackRect.width - 18) {
-        left = trackRect.width - 18;
+      if (left > trackRect.width) {
+        left = trackRect.width;
       }
 
-      percentage.current = (left / (trackRect.width - 18)) * 100;
-      onChange && onChange(Math.round(percentage.current));
+      const percentage = (left / trackRect.width) * 100;
+      setPercentage(percentage);
       if (!value) {
-        setProperty(percentage.current);
+        setProperty(percentage);
       }
     }
   };
@@ -104,15 +142,18 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
   useEffect(() => {
     const trackRect = trackRef.current?.getBoundingClientRect() as DOMRect;
     const handleMouseMove = (e: MouseEvent) => {
+      setWithTransition(false);
       calculateLeft(e.x - trackRect.x);
     };
 
     const clearMouseMove = () => {
+      setWithTransition(true);
       document.removeEventListener("mousemove", handleMouseMove);
     };
 
     const handleMouseup = () => {
-      onChangeEnd && onChangeEnd(Math.round(percentage.current));
+      setTrackStatus("ENDED");
+      setWithTransition(true);
       document.removeEventListener("mousemove", handleMouseMove);
     };
 
@@ -122,6 +163,8 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
       };
 
       trackRef.current.addEventListener("mousedown", (e) => {
+        setTrackStatus("STARTED");
+        setWithTransition(false);
         e.preventDefault();
         e.stopPropagation();
         calculateLeft(e.x - trackRect.x);
@@ -131,6 +174,7 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
       });
 
       ref.current.addEventListener("mousedown", (e) => {
+        setTrackStatus("STARTED");
         e.preventDefault();
         e.stopPropagation();
         document.addEventListener("mouseup", handleMouseup);
@@ -145,22 +189,16 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
       document.removeEventListener("mouseleave", clearMouseMove);
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (value) {
-  //     cal
-  //   }
-  // }, [value])
-
   return (
     <Stack
       sx={{
-        width: 400,
+        width: "100%",
+        paddingRight: 18,
       }}
     >
       <SliderTrackStyled ref={trackRef}>
-        <SliderBarStyled ref={barRef} />
-        <SliderThumbStyled ref={ref} />
+        <SliderBarStyled ref={barRef} withTransition={withTransition} />
+        <SliderThumbStyled ref={ref} withTransition={withTransition} />
       </SliderTrackStyled>
     </Stack>
   );

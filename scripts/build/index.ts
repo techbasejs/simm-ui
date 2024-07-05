@@ -60,8 +60,8 @@ const plugins = [
 
 (async () => {
   const packages = [
-    "@simm/theme",
     "@simm/hooks",
+    "@simm/theme",
     "@simm/core",
     "@simmx/code-highlighter",
     "@simmx/demo",

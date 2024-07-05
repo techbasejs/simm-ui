@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { secondsToHms } from "./utils/seconds-to-hms";
+
 export const useAudio = (source: string) => {
   const audio = useRef<HTMLAudioElement>();
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState<number>(0);
-  const [durationHms, setDurationHms] = useState("--:--");
+  const [remainingTime, setRemainingTime] = useState(0);
+  const [remainingTimeHms, setRemainingTimeHms] = useState("--:--:--");
 
   useEffect(() => {
     audio.current = new Audio();
@@ -22,13 +24,14 @@ export const useAudio = (source: string) => {
     };
   }, []);
 
-  const toggle = () => {
-    if (!audio.current?.paused) {
-      audio?.current?.pause();
-    } else {
-      audio.current?.play();
-    }
-  };
+
+  const play = () => {
+    audio.current?.play();
+  }
+
+  const pause = () => {
+    audio.current?.pause();
+  }
 
   const setCurrentTime = useCallback(
     (time: number) => {
@@ -36,7 +39,8 @@ export const useAudio = (source: string) => {
         audio.current.currentTime = time;
         const remainingTime =
           audio.current.duration - audio.current.currentTime;
-        setDurationHms(secondsToHms(remainingTime));
+        setRemainingTime(remainingTime);
+        
       }
     },
     [audio.current],
@@ -44,18 +48,22 @@ export const useAudio = (source: string) => {
 
   useEffect(() => {
     if (typeof duration === "number") {
-      setDurationHms(secondsToHms(duration));
+      setRemainingTime(duration);
     }
   }, [duration]);
+
+  useEffect(() => {
+    setRemainingTimeHms(secondsToHms(remainingTime));
+  }, [remainingTime]);
 
   useEffect(() => {
     let intervalTime: NodeJS.Timeout;
     if (isPlaying && audio.current) {
       let remainingTime = audio.current.duration - audio.current.currentTime;
-      setDurationHms(secondsToHms(remainingTime));
+      setRemainingTime(remainingTime);
       intervalTime = setInterval(() => {
         remainingTime--;
-        setDurationHms(secondsToHms(remainingTime));
+        setRemainingTime(remainingTime);
       }, 1000);
     }
 
@@ -68,8 +76,10 @@ export const useAudio = (source: string) => {
     audio: audio,
     isPlaying,
     duration,
-    durationHms,
-    toggle,
+    remainingTime,
+    remainingTimeHms,
+    pause,
+    play,
     setCurrentTime,
   };
 };
