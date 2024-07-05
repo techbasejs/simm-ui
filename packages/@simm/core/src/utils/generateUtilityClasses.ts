@@ -26,7 +26,7 @@ export const generateUtilityClasses = <T extends string | undefined | number>(
       (slot) =>
         globalStatePrefix +
         componentName +
-        capitalizeFirstLetter(slot as string),
+        capitalizeFirstLetter(slot?.toString() as string),
     );
   return [globalStatePrefix + componentName, ...classes].join(" ");
 };
