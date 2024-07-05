@@ -1,10 +1,10 @@
-import { Divider } from "./Divider";
+import { Divider, DividerProps } from "./Divider";
 
 export default {
   component: Divider,
   title: "DATA DISPLAY/Divider",
   tags: ["autodocs"],
-};
+} as DividerProps;
 
 export function Default() {
   return (
@@ -36,7 +36,7 @@ export function Default() {
       >
         Drafts
       </div>
-      <Divider margin={"0 30px"} />
+      <Divider />
       <div
         style={{
           padding: "20px",
@@ -44,7 +44,7 @@ export function Default() {
       >
         Trash
       </div>
-      <Divider margin={"0 0 0 30px"} />
+      <Divider />
       <div
         style={{
           padding: "20px",
@@ -87,7 +87,7 @@ export function vertical() {
       >
         B
       </div>
-      <Divider orientation="vertical" margin={"0 0 20px"} />
+      <Divider orientation="vertical" />
 
       <div
         style={{
@@ -96,7 +96,7 @@ export function vertical() {
       >
         C
       </div>
-      <Divider orientation="vertical" margin={"20px 0 0"} />
+      <Divider orientation="vertical" />
       <div
         style={{
           padding: "20px",
@@ -200,7 +200,7 @@ export function custom() {
         >
           Drafts
         </div>
-        <Divider borderWidth="5px" />
+        <Divider size="xl" />
         <div
           style={{
             padding: "20px",
@@ -247,7 +247,7 @@ export function custom() {
         >
           B
         </div>
-        <Divider orientation="vertical" borderWidth="5px" />
+        <Divider orientation="vertical" size="xl" />
 
         <div
           style={{
@@ -294,7 +294,7 @@ export function custom() {
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
-        <Divider textAlign="left" borderWidth="5px">
+        <Divider textAlign="left" size="xl">
           <a style={{ margin: "0 20px" }}>LEFT</a>
         </Divider>
         <div
