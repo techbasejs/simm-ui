@@ -1,8 +1,7 @@
 import styled, { CSSObject } from "@emotion/styled";
 import React, {
   CSSProperties,
-  ElementType,
-  MouseEvent,
+  HTMLAttributes,
   MutableRefObject,
   ReactNode,
   useEffect,
@@ -20,23 +19,16 @@ export type AvatarShape = "circle" | "square";
 
 const GAP_DEFAULT = 4 as const;
 
-export interface AvatarProps {
-  children?: ReactNode;
+export type AvatarProps = HTMLAttributes<HTMLDivElement> & {
   alt?: string;
-  classes?: Object;
-  className?: string;
-  component?: ElementType;
   src?: string;
   srcSet?: string;
-  style?: CSSProperties;
   shape?: AvatarShape;
   size?: AvatarSize;
   gap?: number;
   icon?: ReactNode;
-  crossOrigin?: "" | "anonymous" | "use-credentials";
-  onClick?: (e?: MouseEvent<HTMLElement>) => void;
-  onError?: () => boolean;
-}
+  autoScale?: boolean;
+};
 
 const getAvatarStylesBySize = (size?: AvatarSize): CSSObject => {
   switch (size) {
@@ -108,18 +100,17 @@ const AvatarImg = styled("img")({
 export const Avatar = createPolymorphicComponent<HTMLDivElement, AvatarProps>(
   (props, ref) => {
     const {
+      onError,
       color,
       src,
       srcSet,
       alt,
-      crossOrigin,
       icon,
       children,
       gap = GAP_DEFAULT,
+      autoScale = false,
       ...rest
     } = props;
-
-    const [isImgExist, setIsImgExist] = useState(true);
     const [mounted, setMounted] = useState(false);
     const [scale, setScale] = useState(1);
 
@@ -136,7 +127,10 @@ export const Avatar = createPolymorphicComponent<HTMLDivElement, AvatarProps>(
     }, []);
 
     useEffect(() => {
-      if (!mounted) return;
+      if (!mounted || !autoScale) {
+        setScale(1);
+        return;
+      }
 
       const container = (avatarChildrenRef as MutableRefObject<HTMLDivElement>)
         ?.current;
@@ -167,26 +161,17 @@ export const Avatar = createPolymorphicComponent<HTMLDivElement, AvatarProps>(
           resizeObserver.unobserve(container);
         }
       };
-    }, [mounted]);
-
-    const handleImgLoadError = () => {
-      const { onError } = props;
-      const errorFlag = onError?.();
-      if (!!errorFlag) {
-        setIsImgExist(false);
-      }
-    };
+    }, [mounted, autoScale]);
 
     let renderChildren: ReactNode;
 
-    if (typeof src === "string" && isImgExist) {
+    if (typeof src === "string") {
       renderChildren = (
         <AvatarImg
           src={src}
           srcSet={srcSet}
-          onError={handleImgLoadError}
+          onError={onError}
           alt={alt || ""}
-          crossOrigin={crossOrigin}
         />
       );
     } else if (icon) {
