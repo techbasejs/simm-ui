@@ -200,7 +200,7 @@ export function custom() {
         >
           Drafts
         </div>
-        <Divider size="xl" />
+        <Divider size="xl" color="warning" />
         <div
           style={{
             padding: "20px",
@@ -208,7 +208,7 @@ export function custom() {
         >
           Trash
         </div>
-        <Divider borderStyle="dashed" />
+        <Divider borderStyle="dashed" color="success" />
         <div
           style={{
             padding: "20px",
@@ -294,7 +294,7 @@ export function custom() {
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
-        <Divider textAlign="left" size="xl">
+        <Divider textAlign="left" size="xl" color="#438ce1">
           <a style={{ margin: "0 20px" }}>LEFT</a>
         </Divider>
         <div
