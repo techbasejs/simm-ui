@@ -4,6 +4,7 @@ import { AppShellContext, useAppShellContext } from "../AppShell.context";
 import { useDeviceDetect } from "../../../hooks/use-device-detect";
 import { useTheme } from "../../../theme/useTheme";
 import { UseThemeProps } from "../../../theme";
+import { generateUtilityClasses } from "../../../utils/generateUtilityClasses";
 
 const AppShellMainStyled = styled.div<{
   context: AppShellContext;
@@ -23,8 +24,15 @@ export const AppShellMain = ({ children }: AppShellMainProps) => {
   const context = useAppShellContext();
   const theme = useTheme();
   const { isMobile } = useDeviceDetect();
+  const utilityClasses = generateUtilityClasses("AppShellMain", []);
+
   return (
-    <AppShellMainStyled theme={theme} context={context} isMobile={isMobile}>
+    <AppShellMainStyled
+      className={utilityClasses}
+      theme={theme}
+      context={context}
+      isMobile={isMobile}
+    >
       {children}
     </AppShellMainStyled>
   );

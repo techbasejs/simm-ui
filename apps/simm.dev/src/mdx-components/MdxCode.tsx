@@ -2,7 +2,10 @@ import { Box, useTheme } from "@simm/core";
 import { CodeHighlighter } from "@simmx/code-highlighter";
 import { HTMLAttributes } from "react";
 
-export const MdxCode = ({ children, className }: HTMLAttributes<HTMLElement>) => {
+export const MdxCode = ({
+  children,
+  className,
+}: HTMLAttributes<HTMLElement>) => {
   const lang = className?.replace("language-", "") as string;
   const theme = useTheme();
   if (lang) {

@@ -6,7 +6,5 @@ export function secondsToHms(d: number) {
   const m = Math.round((d % 3600) / 60);
   const s = Math.round((d % 3600) % 60);
 
-  return [h, m, s]
-    .map((n) => AddZero(n))
-    .join(":");
+  return [h, m, s].map((n) => AddZero(n)).join(":");
 }

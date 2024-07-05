@@ -126,18 +126,14 @@ const ButtonRoot = styled(
 
 const _Button = createPolymorphicComponent<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
-    const slots: string[] = [];
-    if (props.variant) {
-      slots.push(props.variant);
-    }
-    if (props.color) {
-      slots.push(props.color);
-    }
-
-    if (props.size) {
-      slots.push(props.size);
-    }
-    const utilityClasses = generateUtilityClasses("Button", slots);
+    const utilityClasses = generateUtilityClasses("Button", [
+      props.variant || "filled",
+      props.color || "primary",
+      props.size || "sm",
+      props.disabled ? "disabled" : undefined,
+      props.fullWidth ? "fullWidth" : undefined,
+      props.loading ? "loading" : undefined,
+    ]);
     return (
       <ButtonRoot className={utilityClasses} ref={ref} {...props}></ButtonRoot>
     );

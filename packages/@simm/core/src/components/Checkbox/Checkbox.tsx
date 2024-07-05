@@ -11,6 +11,7 @@ import {
   PolymorphicComponentPropWithRef,
   createPolymorphicComponent,
 } from "../Box";
+import { generateUtilityClasses } from "../../utils/generateUtilityClasses";
 
 const CheckboxTransition = styled(Transition)({
   display: "flex",
@@ -179,8 +180,14 @@ export const Checkbox = createPolymorphicComponent<
 
   const iconSize = getStylesBySize(props.size).icon;
 
+  const utilityClasses = generateUtilityClasses("Checkbox", [
+    props.variant,
+    props.color,
+  ]);
+
   return (
     <CheckboxLabelStyled
+      className={utilityClasses}
       disabled={rest.disabled}
       labelposition={rest.labelposition}
       size={rest.size}

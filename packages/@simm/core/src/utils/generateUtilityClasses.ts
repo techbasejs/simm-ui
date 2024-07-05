@@ -1,3 +1,5 @@
+import { capitalizeFirstLetter } from "./strings";
+
 export const globalStateClasses = {
   active: "active",
   checked: "checked",
@@ -13,13 +15,18 @@ export const globalStateClasses = {
   selected: "selected",
 };
 
-export const generateUtilityClasses = <T extends string>(
+export const generateUtilityClasses = <T extends string | undefined | number>(
   componentName: string,
   slots: T[],
   globalStatePrefix = "Simm",
 ) => {
   const classes = slots
-    .map((slot) => globalStatePrefix + componentName + "-" + slot)
-    .join(" ");
-  return classes;
+    .filter(Boolean)
+    .map(
+      (slot) =>
+        globalStatePrefix +
+        componentName +
+        capitalizeFirstLetter(slot?.toString() as string),
+    );
+  return [globalStatePrefix + componentName, ...classes].join(" ");
 };

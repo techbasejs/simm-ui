@@ -6,6 +6,7 @@ import { AppShellProvider, useAppShellContext } from "./AppShell.context";
 import { AppShellNavbar } from "./AppShellNavbar/AppShellNavbar";
 import styled, { CSSObject } from "@emotion/styled";
 import { useDeviceDetect } from "../../hooks/use-device-detect";
+import { generateUtilityClasses } from "../../utils/generateUtilityClasses";
 export type AppShellProps = HTMLAttributes<HTMLDivElement> & {
   navbar?: {
     width?: number;
@@ -40,6 +41,8 @@ export const AppShell = createGroupComponent<
     }
   }, [isMobile, navbar?.opened]);
 
+  const utilityClasses = generateUtilityClasses("AppShell", []);
+
   return (
     <AppShellProvider
       value={{
@@ -50,7 +53,9 @@ export const AppShell = createGroupComponent<
         toggleNavbar: (opened) => setNavbarOpened(!!opened),
       }}
     >
-      <AppShellRootStyled ref={ref}>{children}</AppShellRootStyled>
+      <AppShellRootStyled className={utilityClasses} ref={ref}>
+        {children}
+      </AppShellRootStyled>
     </AppShellProvider>
   );
 });

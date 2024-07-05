@@ -1,3 +1,4 @@
+import { generateUtilityClasses } from "../../utils/generateUtilityClasses";
 import { Box } from "../Box";
 import { UnstyledButton } from "../UnstyledButton";
 export type MenuItemType = {
@@ -44,8 +45,11 @@ export const Menu = ({ items, itemRender }: MenuProps) => {
     );
   };
 
+  const utilityClasses = generateUtilityClasses("Menu", []);
+
   return (
     <Box
+      className={utilityClasses}
       sx={{
         ul: {
           listStyle: "none",

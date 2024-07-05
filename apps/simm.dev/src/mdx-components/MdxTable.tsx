@@ -1,7 +1,9 @@
 import { Box, useTheme } from "@simm/core";
 import { TableHTMLAttributes } from "react";
 
-export const MdxTable = ({ children }: TableHTMLAttributes<HTMLTableElement>) => {
+export const MdxTable = ({
+  children,
+}: TableHTMLAttributes<HTMLTableElement>) => {
   const theme = useTheme();
   return (
     <Box

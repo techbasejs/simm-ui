@@ -1,5 +1,5 @@
+export * from "./Avatar";
 export * from "./Box";
-
 export * from "./Button";
 export * from "./IconButton";
 export * from "./Modal";
@@ -18,4 +18,6 @@ export * from "./AppShell";
 export * from "./UnstyledButton";
 export * from "./Tooltip";
 export * from "./Menu";
-export * from './Slider';
+export * from "./Slider";
+export * from "./Alert";
+export * from "./Divider";
