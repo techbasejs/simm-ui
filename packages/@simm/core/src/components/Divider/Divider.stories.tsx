@@ -1,3 +1,4 @@
+import { Box } from "../Box";
 import { Divider, DividerProps } from "./Divider";
 
 export default {
@@ -110,8 +111,8 @@ export function vertical() {
 }
 export function horizontalWithChildren() {
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         flexDirection: "column",
         border: "1px solid #f6f6f6",
@@ -128,10 +129,7 @@ export function horizontalWithChildren() {
       >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </div>
-      <Divider textAlign="center">
-        {" "}
-        <a style={{ margin: "0 20px" }}>CENTER</a>
-      </Divider>
+      <Divider labelPosition="center" label="CENTER" />
       <div
         style={{
           padding: "20px",
@@ -140,9 +138,7 @@ export function horizontalWithChildren() {
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </div>
 
-      <Divider textAlign="left">
-        <a style={{ margin: "0 20px" }}>LEFT</a>
-      </Divider>
+      <Divider labelPosition="left" label="LEFT" />
       <div
         style={{
           padding: "20px",
@@ -150,9 +146,7 @@ export function horizontalWithChildren() {
       >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </div>
-      <Divider textAlign="right">
-        <a style={{ margin: "0 20px" }}>RIGHT</a>
-      </Divider>
+      <Divider labelPosition="right" label="LEFT" />
       <div
         style={{
           padding: "20px",
@@ -160,7 +154,7 @@ export function horizontalWithChildren() {
       >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </div>
-    </div>
+    </Box>
   );
 }
 export function custom() {
@@ -192,7 +186,11 @@ export function custom() {
         >
           Inbox
         </div>
-        <Divider color="red" />
+        <Box
+          as={Divider}
+          size="lg"
+          sx={{ borderColor: "#204bdb", borderStyle: "dashed" }}
+        />
         <div
           style={{
             padding: "20px",
@@ -238,7 +236,7 @@ export function custom() {
         >
           A
         </div>
-        <Divider orientation="vertical" color="red" />
+        <Divider orientation="vertical" />
 
         <div
           style={{
@@ -284,9 +282,7 @@ export function custom() {
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
-        <Divider textAlign="center" color="red">
-          <a style={{ margin: "0 20px" }}>CENTER</a>
-        </Divider>
+        <Box as={Divider} label="CENTER" size="lg" sx={{ color: "#204bdb" }} />
         <div
           style={{
             padding: "20px",
@@ -294,9 +290,7 @@ export function custom() {
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
-        <Divider textAlign="left" size="xl" color="#438ce1">
-          <a style={{ margin: "0 20px" }}>LEFT</a>
-        </Divider>
+        <Divider labelPosition="left" size="xl" label="LEFT" color="success" />
         <div
           style={{
             padding: "20px",
@@ -304,9 +298,12 @@ export function custom() {
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
-        <Divider textAlign="right" borderStyle="dashed">
-          <a style={{ margin: "0 20px" }}>RIGHT</a>
-        </Divider>
+        <Divider
+          labelPosition="right"
+          borderStyle="dashed"
+          label="RIGHT"
+          color="error"
+        />
         <div
           style={{
             padding: "20px",
