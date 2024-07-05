@@ -5,6 +5,7 @@ import { useTheme } from "../../theme/useTheme";
 import { ColorType } from "../../types/types";
 import { createPolymorphicComponent } from "../Box";
 import { Transition } from "../Transition";
+import { generateUtilityClasses } from "../../utils/generateUtilityClasses";
 
 const ChipWrapperStyled = styled.label<{
   color?: ColorType;
@@ -31,7 +32,7 @@ const ChipWrapperStyled = styled.label<{
     userSelect: "none",
     height: 28,
     boxSizing: "border-box",
-    transition: "background 350ms"
+    transition: "background 350ms",
   };
 });
 
@@ -63,8 +64,14 @@ export const Chip = createPolymorphicComponent<HTMLInputElement, ChipProps>(
       setChecked(e.currentTarget.checked);
       onChange?.(e);
     };
+    const utilityClasses = generateUtilityClasses("Chip", [props.color]);
     return (
-      <ChipWrapperStyled autoSize={autoSize} checked={checked} color={color}>
+      <ChipWrapperStyled
+        className={utilityClasses}
+        autoSize={autoSize}
+        checked={checked}
+        color={color}
+      >
         <ChipInputStyled
           ref={ref}
           defaultChecked={checked}

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
+import { generateUtilityClasses } from "../../../utils/generateUtilityClasses";
 
 export interface ButtonGroupProps {
   children?: React.ReactNode;
@@ -25,5 +26,10 @@ export const ButtonGroup = React.forwardRef(function Group(
   { children }: ButtonGroupProps,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
-  return <ButtonGroupStyled ref={ref}>{children}</ButtonGroupStyled>;
+  const utilityClasses = generateUtilityClasses("ButtonGroup", []);
+  return (
+    <ButtonGroupStyled className={utilityClasses} ref={ref}>
+      {children}
+    </ButtonGroupStyled>
+  );
 });

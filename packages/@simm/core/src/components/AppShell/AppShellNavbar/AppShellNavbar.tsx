@@ -4,6 +4,7 @@ import { useTheme } from "../../../theme/useTheme";
 import { UseThemeProps } from "../../../theme/theme.type";
 import { useDeviceDetect } from "../../../hooks/use-device-detect";
 import { AppShellContext, useAppShellContext } from "../AppShell.context";
+import { generateUtilityClasses } from "../../../utils/generateUtilityClasses";
 
 const NavStyled = styled.nav<{
   theme?: UseThemeProps;
@@ -30,6 +31,7 @@ export const AppShellNavbar = ({ children }: AppShellNavbarProps) => {
   const context = useAppShellContext();
   const { isMobile } = useDeviceDetect();
   const [navbarStyles, setNavbarStyles] = useState<CSSObject>({});
+  const utilityClasses = generateUtilityClasses("AppShellNavbar", []);
 
   useEffect(() => {
     if (context.navbarOpened) {
@@ -44,7 +46,12 @@ export const AppShellNavbar = ({ children }: AppShellNavbarProps) => {
     }
   }, [context.navbarOpened]);
   return (
-    <NavStyled theme={theme} context={context} navbarStyles={navbarStyles}>
+    <NavStyled
+      className={utilityClasses}
+      theme={theme}
+      context={context}
+      navbarStyles={navbarStyles}
+    >
       {children}
     </NavStyled>
   );

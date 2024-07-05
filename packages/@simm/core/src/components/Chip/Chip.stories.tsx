@@ -12,7 +12,6 @@ export function Default() {
     <Stack direction="row">
       <Chip>My chip</Chip>
       <Chip>My chip sssssssssssss ss</Chip>
-
     </Stack>
   );
 }

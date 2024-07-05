@@ -12,6 +12,7 @@ import { useTheme } from "../../theme/useTheme";
 import { createPolymorphicComponent } from "../Box";
 import { composeRef } from "../../utils/composeRef";
 import { colors } from "@simm/theme";
+import { generateUtilityClasses } from "../../utils/generateUtilityClasses";
 
 export type AvatarSize = "sm" | "md" | "lg" | number;
 
@@ -190,8 +191,17 @@ export const Avatar = createPolymorphicComponent<HTMLDivElement, AvatarProps>(
       );
     }
 
+    const utilityClasses = generateUtilityClasses("Avatar", [
+      props.size,
+      props.shape,
+    ]);
+
     return (
-      <AvatarWrapper ref={avatarNodeMergedRef} {...rest}>
+      <AvatarWrapper
+        className={utilityClasses}
+        ref={avatarNodeMergedRef}
+        {...rest}
+      >
         {renderChildren}
       </AvatarWrapper>
     );

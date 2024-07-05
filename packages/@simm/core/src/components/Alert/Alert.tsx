@@ -9,9 +9,10 @@ import {
   IconX,
   IconProps,
 } from "@tabler/icons-react";
-import { ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import { Stack } from "../Stack";
 import { ColorType, VariantType } from "../../types/types";
+import { generateUtilityClasses } from "../../utils/generateUtilityClasses";
 
 export type AlertColorType = Extract<
   ColorType,
@@ -35,7 +36,9 @@ export type AlertProps = {
   onClose?: () => void;
 } & BoxExtraProps;
 
-const AlertRoot = styled(Stack)<AlertProps>((props) => {
+const AlertRoot = styled(Stack)<HTMLAttributes<HTMLElement> & AlertProps>((
+  props,
+) => {
   const theme = useTheme();
   const color = props.color;
   const variant = props.variant;
@@ -78,7 +81,7 @@ const defaultIconMapping = {
   info: <IconAlertCircle fontSize="inherit" />,
 };
 
-const AlertIcon = styled(Stack)(() => ({
+const AlertIcon = styled(Stack)<HTMLAttributes<HTMLDivElement>>(() => ({
   width: "24px",
   height: "24px",
 }));
@@ -116,8 +119,16 @@ export const Alert = createPolymorphicComponent<HTMLDivElement, AlertProps>(
       iconMapping: props.iconMapping || defaultIconMapping,
     };
 
+    const utilityClasses = generateUtilityClasses("Alert", [
+      props.variant || "filled",
+      props.color || "primary",
+    ]);
+
+    const alertIconClasses = generateUtilityClasses("AlertIcon", []);
+
     return (
       <AlertRoot
+        className={utilityClasses}
         ref={ref}
         direction="row"
         align={alertTitle ? "flex-start" : "center"}
@@ -131,7 +142,7 @@ export const Alert = createPolymorphicComponent<HTMLDivElement, AlertProps>(
           spacing={8}
         >
           {icon !== false ? (
-            <AlertIcon align="center">
+            <AlertIcon className={alertIconClasses} align="center">
               {icon ||
                 ownerState.iconMapping[ownerState.color] ||
                 defaultIconMapping[ownerState.color]}

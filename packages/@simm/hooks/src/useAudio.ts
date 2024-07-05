@@ -30,13 +30,17 @@ export const useAudio = (source: string) => {
     }
   };
 
-  const setCurrentTime = useCallback((time: number) => {
-    if (audio.current) {
-      audio.current.currentTime = time;
-      const remainingTime = audio.current.duration - audio.current.currentTime;
-      setDurationHms(secondsToHms(remainingTime));
-    }
-  }, [audio.current]);
+  const setCurrentTime = useCallback(
+    (time: number) => {
+      if (audio.current) {
+        audio.current.currentTime = time;
+        const remainingTime =
+          audio.current.duration - audio.current.currentTime;
+        setDurationHms(secondsToHms(remainingTime));
+      }
+    },
+    [audio.current],
+  );
 
   useEffect(() => {
     if (typeof duration === "number") {
