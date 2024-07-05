@@ -11,10 +11,10 @@ export type DividerTextAlignType = "center" | "right" | "left";
 
 export type DividerProps = React.HTMLAttributes<HTMLDivElement> & {
   orientation?: DividerOrientationType;
-  textAlign?: DividerTextAlignType;
+  label?: string | React.ReactNode;
+  labelPosition?: DividerTextAlignType;
   size?: DividerSizeType;
-  color?: ColorType | React.CSSProperties["color"];
-  borderStyle?: React.CSSProperties["borderStyle"];
+  color?: ColorType;
 } & BoxExtraProps;
 
 const getDividerStylesBySize = (
@@ -43,21 +43,17 @@ const getDividerStylesBySize = (
 const DividerRoot = styled(Stack)<DividerProps>((props) => {
   const theme = useTheme();
   const {
-    borderStyle = "solid",
     color,
     orientation = "horizontal",
-    textAlign = "center",
-    children,
+    labelPosition = "center",
+    label,
     size,
   } = props;
   const borderWidth = getDividerStylesBySize(size);
-  let DividerColor: ColorType | React.CSSProperties["color"] = color
-    ? color
+  const dividerColor = color
+    ? theme.pallete?.[color]?.main
     : theme.pallete?.divider;
-  if (color && theme.pallete?.[color as ColorType]) {
-    DividerColor = theme.pallete?.[color as ColorType]?.main;
-  }
-  const border = `${borderWidth} ${borderStyle} ${DividerColor}`;
+  const border = `${borderWidth} solid ${dividerColor}`;
 
   const dividerStyles: CSSObject = {
     borderWidth: 0,
@@ -68,7 +64,7 @@ const DividerRoot = styled(Stack)<DividerProps>((props) => {
     dividerStyles.alignSelf = "stretch";
   }
 
-  if (orientation === "horizontal" && children) {
+  if (orientation === "horizontal" && label) {
     dividerStyles.display = "flex";
     dividerStyles.flexDirection = "row";
 
@@ -80,18 +76,18 @@ const DividerRoot = styled(Stack)<DividerProps>((props) => {
       borderTop: border,
     };
 
-    if (textAlign === "right" || textAlign === "center") {
+    if (labelPosition === "right" || labelPosition === "center") {
       dividerStyles[":before"] = {
         ...styleCommon,
       };
     }
-    if (textAlign === "left" || textAlign === "center") {
+    if (labelPosition === "left" || labelPosition === "center") {
       dividerStyles[":after"] = {
         ...styleCommon,
       };
     }
   }
-  if (orientation === "horizontal" && !children) {
+  if (orientation === "horizontal" && !label) {
     dividerStyles.borderTop = border;
   }
   return { ...dividerStyles, ...props.sx };
@@ -99,10 +95,10 @@ const DividerRoot = styled(Stack)<DividerProps>((props) => {
 
 export const Divider = createPolymorphicComponent<HTMLDivElement, DividerProps>(
   (props, ref) => {
-    const { children, orientation } = props;
+    const { label, orientation } = props;
     return (
       <DividerRoot ref={ref} {...props}>
-        {children && orientation !== "vertical" ? children : null}
+        {label && orientation !== "vertical" ? label : null}
       </DividerRoot>
     );
   },
