@@ -8,11 +8,11 @@ import { ColorType, VariantType } from "../../types/types";
 import { keyframes } from "@emotion/react";
 export type NotificationVariantType = Extract<
   VariantType,
-  "outlined" | "filled"
+  "outlined" | "filled" | "default"
 >;
 export type NotificationRadiusType = "xs" | "sm" | "md" | "lg" | "xl";
-export type NotificationProps = {
-  variant?: string;
+export type NotificationProps = HTMLAttributes<HTMLElement> & {
+  variant?: NotificationVariantType;
   onClose?: () => void;
   color?: ColorType | React.CSSProperties["color"];
   radius?: NotificationRadiusType;
@@ -20,7 +20,6 @@ export type NotificationProps = {
   title?: React.ReactNode;
   children?: React.ReactNode;
   loading?: boolean;
-  withBorder?: boolean;
   withCloseButton?: boolean;
   closeButtonProps?: Record<string, any>;
 } & BoxExtraProps;
@@ -53,15 +52,20 @@ const NotificationRoot = styled(Stack)<
   HTMLAttributes<HTMLElement> & NotificationProps
 >((props) => {
   const theme = useTheme();
-  const { color = "success", radius, icon, withBorder, loading } = props;
+  const {
+    color = "success",
+    radius,
+    icon,
+    variant = "default",
+    loading,
+  } = props;
   const _borderRadius = getNotificationWidthByRadius(radius);
   const notificationStyles: CSSObject = {
     position: "relative",
     borderRadius: _borderRadius,
     boxSizing: "border-box",
     padding: "0.625rem",
-    boxShadow:
-      "0 0.0625rem 0.1875rem rgba(0,0,0,.05),rgba(0,0,0,.05) 0 1.75rem 1.4375rem -0.4375rem,rgba(0,0,0,.04) 0 0.75rem 0.75rem -0.4375rem",
+    boxShadow: theme?.shadows?.sm,
   };
 
   notificationStyles.backgroundColor = theme.pallete?.common?.white;
@@ -85,8 +89,9 @@ const NotificationRoot = styled(Stack)<
       borderRadius: _borderRadius,
     };
   }
-  if (withBorder) {
-    notificationStyles.border = "1px solid #dee2e6";
+  if (variant === "outlined") {
+    notificationStyles.border = "1px solid";
+    notificationStyles.borderColor = theme?.shape?.borderColor;
   }
 
   return { ...notificationStyles, ...props.sx };
@@ -98,36 +103,45 @@ const NotificationIcon = styled(Stack)<HTMLAttributes<HTMLDivElement>>(() => ({
   marginInlineEnd: "16px",
 }));
 
-const NotificationTitle = styled(Box)(() => ({
-  marginBottom: "0.125rem",
-  fontSize: "0.875rem",
-  lineHeight: 1.45,
-  fontWeight: 500,
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  color: "#212529",
-}));
+const NotificationTitle = styled(Box)(() => {
+  const theme = useTheme();
+  return {
+    marginBottom: "0.125rem",
+    fontSize: "0.875rem",
+    lineHeight: 1.45,
+    fontWeight: 500,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    color: theme?.pallete?.grey?.[900],
+  };
+});
 
-const NotificationDescription = styled(Box)(() => ({
-  color: "#868e96",
-  fontSize: "0.875rem",
-  lineHeight: 1.45,
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-}));
+const NotificationDescription = styled(Box)(() => {
+  const theme = useTheme();
+  return {
+    color: theme?.pallete?.grey?.[500],
+    fontSize: "0.875rem",
+    lineHeight: 1.45,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  };
+});
 
-const NotificationAction = styled(Stack)(() => ({
-  padding: "6px",
-  color: "inherit",
-  cursor: "pointer",
-  marginInlineStart: "10px",
-  ":hover": {
-    backgroundColor: "#f8f9fa",
-  },
-  ":active": {
-    transform: "translateY(0.0625rem)",
-  },
-}));
+const NotificationAction = styled(Stack)(() => {
+  const theme = useTheme();
+  return {
+    padding: "6px",
+    color: "inherit",
+    cursor: "pointer",
+    marginInlineStart: "10px",
+    ":hover": {
+      backgroundColor: theme?.pallete?.grey?.[0],
+    },
+    ":active": {
+      transform: "translateY(0.0625rem)",
+    },
+  };
+});
 
 const loadingSpin = keyframes`
 0% {

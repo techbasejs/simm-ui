@@ -48,7 +48,7 @@ export function Default() {
           color="success"
           title="We notify you that"
           radius="sm"
-          withBorder
+          variant="outlined"
         >
           You are now obligated to give a star to Mantine project on GitHub
         </Notification>
