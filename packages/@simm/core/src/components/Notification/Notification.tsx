@@ -6,6 +6,7 @@ import { HTMLAttributes, ReactNode } from "react";
 import { Stack } from "../Stack";
 import { ColorType, VariantType } from "../../types/types";
 import { keyframes } from "@emotion/react";
+import { colors } from "@simm/theme";
 export type NotificationVariantType = Extract<
   VariantType,
   "outlined" | "filled" | "default"
@@ -103,45 +104,36 @@ const NotificationIcon = styled(Stack)<HTMLAttributes<HTMLDivElement>>(() => ({
   marginInlineEnd: "16px",
 }));
 
-const NotificationTitle = styled(Box)(() => {
-  const theme = useTheme();
-  return {
-    marginBottom: "0.125rem",
-    fontSize: "0.875rem",
-    lineHeight: 1.45,
-    fontWeight: 500,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    color: theme?.pallete?.grey?.[900],
-  };
-});
+const NotificationTitle = styled(Box)(() => ({
+  marginBottom: "0.125rem",
+  fontSize: "0.875rem",
+  lineHeight: 1.45,
+  fontWeight: 500,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  color: colors?.gray?.[900],
+}));
 
-const NotificationDescription = styled(Box)(() => {
-  const theme = useTheme();
-  return {
-    color: theme?.pallete?.grey?.[500],
-    fontSize: "0.875rem",
-    lineHeight: 1.45,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-  };
-});
+const NotificationDescription = styled(Box)(() => ({
+  color: colors?.gray?.[500],
+  fontSize: "0.875rem",
+  lineHeight: 1.45,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+}));
 
-const NotificationAction = styled(Stack)(() => {
-  const theme = useTheme();
-  return {
-    padding: "6px",
-    color: "inherit",
-    cursor: "pointer",
-    marginInlineStart: "10px",
-    ":hover": {
-      backgroundColor: theme?.pallete?.grey?.[0],
-    },
-    ":active": {
-      transform: "translateY(0.0625rem)",
-    },
-  };
-});
+const NotificationAction = styled(Stack)(() => ({
+  padding: "6px",
+  color: "inherit",
+  cursor: "pointer",
+  marginInlineStart: "10px",
+  ":hover": {
+    backgroundColor: colors?.gray?.[25],
+  },
+  ":active": {
+    transform: "translateY(0.0625rem)",
+  },
+}));
 
 const loadingSpin = keyframes`
 0% {
