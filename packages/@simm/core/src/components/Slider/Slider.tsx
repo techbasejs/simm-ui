@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  HTMLAttributes,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Stack } from "../Stack";
 import styled, { CSSObject } from "@emotion/styled";
 import { useTheme } from "../../theme";
@@ -63,13 +69,23 @@ const SliderThumbStyled = styled.div<{ withTransition: boolean }>(
 
 type TrackStatusType = "NOT_STARTED" | "STARTED" | "PROGRESS" | "ENDED";
 
-export type SliderProps = {
+export type SliderProps = HTMLAttributes<HTMLDivElement> & {
+  disabled?: boolean;
   value?: number;
+  min?: number;
+  max?: number;
   onChange?: (value: number) => void;
   onChangeEnd?: (value: number) => void;
 };
 
-export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
+export const Slider = ({
+  min = 10,
+  max = 100,
+  value,
+  disabled,
+  onChange,
+  onChangeEnd,
+}: SliderProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
@@ -87,7 +103,8 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
   }, [trackStatus, percentage]);
 
   useEffect(() => {
-    onChange?.(percentage);
+    const value = min + (max - min) * (percentage / 100);
+    onChange?.(value);
   }, [percentage]);
 
   const calculateLeft = (x: number) => {
@@ -103,7 +120,7 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
         left = trackRect.width;
       }
 
-      const percentage = (left / trackRect.width) * 100;
+      const percentage = Math.min(100, (left / trackRect.width) * 100);
       setPercentage(percentage);
       if (!value) {
         setProperty(percentage);
@@ -118,7 +135,8 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
       barRef.current &&
       typeof value === "number"
     ) {
-      setProperty(value);
+      const percentage = ((value - min) / (max - min)) * 100;
+      setProperty(percentage);
     }
   }, [value, ref.current, barRef.current, trackRef.current]);
 
@@ -140,6 +158,9 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
   );
 
   useEffect(() => {
+    if (disabled) {
+      return;
+    }
     const trackRect = trackRef.current?.getBoundingClientRect() as DOMRect;
     const handleMouseMove = (e: MouseEvent) => {
       setWithTransition(false);
@@ -188,7 +209,7 @@ export const Slider = ({ value, onChange, onChangeEnd }: SliderProps) => {
       document.removeEventListener("mouseup", handleMouseup);
       document.removeEventListener("mouseleave", clearMouseMove);
     };
-  }, []);
+  }, [disabled]);
   return (
     <Stack
       sx={{
