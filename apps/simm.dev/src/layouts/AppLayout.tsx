@@ -34,6 +34,14 @@ const items: MenuItemType[] = [
     ],
   },
   {
+    label: "Customization",
+    children: [
+      {
+        label: "How to customizate",
+      },
+    ],
+  },
+  {
     label: "Components",
     children: [
       {
@@ -147,10 +155,15 @@ const items: MenuItemType[] = [
     ],
   },
   {
-    label: "Customization",
+    label: "SimmX",
     children: [
       {
-        label: "How to customizate",
+        label: "Code Highlighter",
+        href: "/x/code-highlighter",
+      },
+      {
+        label: "Open Player",
+        href: "/x/open-player",
       },
     ],
   },
