@@ -1,0 +1,43 @@
+{
+  "name": "@simmx/open-player",
+  "version": "1.0.0",
+  "description": "The next framework for reactjs",
+  "main": "./cjs/index.cjs",
+  "module": "./esm/index.mjs",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.mts",
+        "default": "./esm/index.mjs"
+      },
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./cjs/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "cjs",
+    "esm",
+    "lib"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "react-player": "^2.16.0",
+    "react-countdown": "2.3.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@tabler/icons-react": "3.6.0",
+    "@simm/core": "workspace:*",
+    "@simm/hooks": "workspace:*"
+  },
+  "devDependencies": {
+    "@simm/core": "workspace:*",
+    "@tabler/icons-react": "^3.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

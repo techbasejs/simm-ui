@@ -22,7 +22,7 @@ export function Default() {
     <Stack spacing={20}>
       <Title>Variants</Title>
       <Stack direction="row" spacing={10}>
-        <Button onClick={handleClick} loading={loading} >
+        <Button onClick={handleClick} loading={loading}>
           filled
         </Button>
         <Button variant="outlined">outlined</Button>
