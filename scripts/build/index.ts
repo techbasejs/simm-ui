@@ -39,7 +39,7 @@ const externalPackages = [
   "shiki",
   "chroma-js",
   "react-countdown",
-  "react-player"
+  "react-player",
 ];
 const plugins = [
   esbuild({
@@ -67,7 +67,7 @@ const plugins = [
     "@simm/core",
     "@simmx/code-highlighter",
     "@simmx/demo",
-    "@simmx/open-player"
+    "@simmx/open-player",
   ];
   if (argv._[0] === "all") {
     for (const packageName of packages) {

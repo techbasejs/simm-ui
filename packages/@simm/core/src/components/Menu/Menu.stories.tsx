@@ -10,10 +10,8 @@ export default {
 const items: MenuItemType[] = [
   {
     label: "Components",
-    href: "#xxxx",
     children: [
       {
-        href: "#yyyy",
         label: "Avatar",
       },
       {
@@ -21,6 +19,17 @@ const items: MenuItemType[] = [
       },
       {
         label: "Popover",
+        children: [
+          {
+            label: "Avatar",
+          },
+          {
+            label: "Button",
+          },
+          {
+            label: "Popover",
+          },
+        ],
       },
     ],
   },

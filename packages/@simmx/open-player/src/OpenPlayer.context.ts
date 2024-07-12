@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 
 export type OpenPlayerContext = {
+  loading?: boolean;
   playing?: boolean;
   playedSeconds?: number;
   loadedSeconds?: number;

@@ -1,9 +1,13 @@
 import { Box } from "@simm/core";
 import { useMemo } from "react";
-import { useOpenPlayerContext } from "./OpenPlayer.context";
+import { OpenPlayerContext, useOpenPlayerContext } from "./OpenPlayer.context";
 import Countdown, { CountdownRendererFn } from "react-countdown";
 
-export const OpenPlayerTimer = () => {
+export type OpenPlayerTimerProps = {
+  render?: (ctx?: OpenPlayerContext) => React.ReactNode;
+};
+
+export const OpenPlayerTimer = ({ render }: OpenPlayerTimerProps) => {
   const ctx = useOpenPlayerContext();
   const padZero = (n: number) => {
     return n >= 10 ? n.toString() : "0" + n;
@@ -31,6 +35,23 @@ export const OpenPlayerTimer = () => {
     );
   }, [ctx.loadedSeconds, ctx.playedSeconds]);
 
+  if (ctx.loading) {
+    return (
+      <Box
+        as="time"
+        sx={{
+          minWidth: 42,
+        }}
+      >
+        --:--:--
+      </Box>
+    );
+  }
+
+  if (typeof render === "function") {
+    return render(ctx);
+  }
+
   return (
     <Box
       as="time"
@@ -39,6 +60,7 @@ export const OpenPlayerTimer = () => {
       }}
     >
       <Countdown
+        autoStart={false}
         date={date}
         zeroPadTime={2}
         zeroPadDays={2}
