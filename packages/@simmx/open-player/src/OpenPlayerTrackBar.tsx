@@ -1,17 +1,23 @@
 import { Slider } from "@simm/core";
-import { useMemo } from "react";
-import { useOpenPlayerContext } from "./OpenPlayer.context";
+import { OpenPlayerContext, useOpenPlayerContext } from "./OpenPlayer.context";
 
-export const OpenPlayerTrackBar = () => {
+export type OpenPlayerTrackBarProps = {
+  render?: (ctx: OpenPlayerContext) => React.ReactNode;
+};
+
+export const OpenPlayerTrackBar = ({ render }: OpenPlayerTrackBarProps) => {
   const ctx = useOpenPlayerContext();
 
-  const sliderValue = useMemo(() => {
-    if (ctx.loadedSeconds) {
-      return ((ctx.playedSeconds || 0) / ctx.loadedSeconds) * 100;
-    }
+  if (typeof render === "function") {
+    return render(ctx);
+  }
 
-    return 0;
-  }, [ctx.playedSeconds, ctx.loadedSeconds]);
-
-  return <Slider value={sliderValue} onChangeEnd={ctx.handleChangeEnd} />;
+  return (
+    <Slider
+      value={ctx.playedSeconds}
+      min={0}
+      max={ctx.loadedSeconds}
+      onSliderChangeEnd={ctx.handleChangeEnd}
+    />
+  );
 };

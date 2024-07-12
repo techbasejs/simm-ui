@@ -1,3 +1,4 @@
+import { MouseEvent } from "react";
 import { generateUtilityClasses } from "../../utils/generateUtilityClasses";
 import { Box } from "../Box";
 import { UnstyledButton } from "../UnstyledButton";
@@ -25,12 +26,22 @@ export const Menu = ({ items, itemRender }: MenuProps) => {
       }
     }
 
+    const handleClick = (e: MouseEvent) => {
+      const elm = e.currentTarget.nextElementSibling as HTMLElement;
+      elm.style.height = elm.scrollHeight + "px";
+      setTimeout(() => {
+        elm.style.height = "auto";
+      }, 100);
+      // console.log(e.currentTarget.nextElementSibling);
+    };
+
     return (
       <Box as="li" py={4} key={prevKey}>
         {typeof itemRender === "function" ? (
           itemRender(item)
         ) : (
           <UnstyledButton
+            onClick={handleClick}
             as={"a"}
             href={item.href as string}
             {...(item.target && { target: item.target })}
@@ -54,9 +65,14 @@ export const Menu = ({ items, itemRender }: MenuProps) => {
         ul: {
           listStyle: "none",
           paddingInlineStart: 24,
+          transition: "all 0.25s",
         },
         "> ul": {
           paddingInlineStart: 0,
+        },
+        "> ul ul": {
+          height: 0,
+          overflow: "hidden",
         },
       }}
     >

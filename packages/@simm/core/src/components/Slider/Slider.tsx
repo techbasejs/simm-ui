@@ -74,8 +74,8 @@ export type SliderProps = HTMLAttributes<HTMLDivElement> & {
   value?: number;
   min?: number;
   max?: number;
-  onChange?: (value: number) => void;
-  onChangeEnd?: (value: number) => void;
+  onSliderChange?: (value: number) => void;
+  onSliderChangeEnd?: (value: number) => void;
 };
 
 export const Slider = ({
@@ -83,8 +83,8 @@ export const Slider = ({
   max = 100,
   value,
   disabled,
-  onChange,
-  onChangeEnd,
+  onSliderChange,
+  onSliderChangeEnd,
 }: SliderProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -97,14 +97,14 @@ export const Slider = ({
   useEffect(() => {
     if (trackStatus) {
       if (trackStatus === "ENDED") {
-        onChangeEnd?.(percentage);
+        onSliderChangeEnd?.(percentage);
       }
     }
   }, [trackStatus, percentage]);
 
   useEffect(() => {
     const value = min + (max - min) * (percentage / 100);
-    onChange?.(value);
+    onSliderChange?.(value);
   }, [percentage]);
 
   const calculateLeft = (x: number) => {
@@ -135,8 +135,10 @@ export const Slider = ({
       barRef.current &&
       typeof value === "number"
     ) {
-      const percentage = ((value - min) / (max - min)) * 100;
-      setProperty(percentage);
+      if (max > 0) {
+        const percentage = ((value - min) / (max - min)) * 100;
+        setProperty(percentage);
+      }
     }
   }, [value, ref.current, barRef.current, trackRef.current]);
 

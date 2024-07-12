@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { OnProgressProps } from "react-player/base";
 import { OpenPlayerProvider } from "./OpenPlayer.context";
@@ -7,12 +7,14 @@ import { OpenPlayerTrackBar } from "./OpenPlayerTrackBar";
 import { OpenPlayerTimer } from "./OpenPlayerTimer";
 
 export type OpenPlayerProps = {
+  src: string;
   children?: React.ReactNode;
 };
 
-const _OpenPlayer = ({ children }: OpenPlayerProps) => {
+const _OpenPlayer = ({ children, src }: OpenPlayerProps) => {
   const playerRef = useRef<ReactPlayer>(null);
   const [playing, setPlaying] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [loadedSeconds, setLoadedSeconds] = useState(0);
 
@@ -21,6 +23,7 @@ const _OpenPlayer = ({ children }: OpenPlayerProps) => {
   };
 
   const handleOnReady = (player: ReactPlayer) => {
+    setLoading(false);
     setLoadedSeconds(player.getDuration());
   };
 
@@ -46,6 +49,7 @@ const _OpenPlayer = ({ children }: OpenPlayerProps) => {
   return (
     <OpenPlayerProvider
       value={{
+        loading: loading,
         playing: playing,
         loadedSeconds: loadedSeconds,
         playedSeconds: playedSeconds,
@@ -59,7 +63,7 @@ const _OpenPlayer = ({ children }: OpenPlayerProps) => {
         ref={playerRef}
         onReady={handleOnReady}
         onProgress={handleProgress}
-        url="https://storage.googleapis.com/media-session/elephants-dream/the-wires.mp3"
+        url={src}
       />
       {children}
     </OpenPlayerProvider>
