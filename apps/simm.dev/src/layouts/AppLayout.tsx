@@ -145,6 +145,10 @@ const items: MenuItemType[] = [
         href: "/core/components/tooltip",
       },
       {
+        label: "Tabs",
+        href: "/core/components/tabs",
+      },
+      {
         label: "Transition",
         href: "/core/components/transition",
       },
