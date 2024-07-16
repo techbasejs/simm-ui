@@ -20,7 +20,7 @@ export function Default() {
     <Stack spacing={10}>
       <Slider />
 
-      <Slider value={sliderValue} onChange={onSliderChange} />
+      <Slider value={sliderValue} onSliderChange={onSliderChange} />
       <Stack mt={10}>{sliderValue}</Stack>
 
       <Button onClick={handleChangeValue}>Change value</Button>
