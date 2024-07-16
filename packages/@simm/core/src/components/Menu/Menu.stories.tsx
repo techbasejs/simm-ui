@@ -28,6 +28,17 @@ const items: MenuItemType[] = [
           },
           {
             label: "Popover",
+            children: [
+              {
+                label: "Avatar",
+              },
+              {
+                label: "Button",
+              },
+              {
+                label: "Popover",
+              },
+            ],
           },
         ],
       },
