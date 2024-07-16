@@ -1,8 +1,11 @@
-import { MouseEvent } from "react";
+import { HTMLAttributes, MouseEvent, useEffect, useRef, useState } from "react";
 import { generateUtilityClasses } from "../../utils/generateUtilityClasses";
 import { Box } from "../Box";
 import { UnstyledButton } from "../UnstyledButton";
+import styled from "@emotion/styled";
+import { IconChevronDown, IconChevronRight } from "@tabler/icons-react";
 export type MenuItemType = {
+  expanded?: boolean;
   label: string;
   href?: string;
   target?: string;
@@ -14,49 +17,72 @@ export type MenuProps = {
   itemRender?: (item: MenuItemType) => React.ReactNode;
 };
 
+const MenuListRoot = styled.ul(() => ({
+  overflow: "hidden",
+}));
+
 export const Menu = ({ items, itemRender }: MenuProps) => {
+  const utilityClasses = generateUtilityClasses("Menu", []);
+
+  const duration = 250;
+
   const renderItems = () =>
     items?.map((item, index) => renderItem(item, index.toString()));
+
   const renderItem = (item: MenuItemType, prevKey: string) => {
-    const output = [];
+    const [expanded, setExpanded] = useState(false);
+    const childrenItems = [];
     if (item.children) {
       for (const [index, child] of item.children.entries()) {
         const key = prevKey + index;
-        output.push(renderItem(child, key));
+        childrenItems.push(renderItem(child, key));
       }
     }
 
     const handleClick = (e: MouseEvent) => {
-      const elm = e.currentTarget.nextElementSibling as HTMLElement;
-      elm.style.height = elm.scrollHeight + "px";
-      setTimeout(() => {
-        elm.style.height = "auto";
-      }, 100);
-      // console.log(e.currentTarget.nextElementSibling);
+      const expandedElm = e.currentTarget
+        .nextElementSibling as HTMLUListElement;
+      if (expandedElm) {
+        if (expandedElm.clientHeight === 0) {
+          expandedElm.style.height = expandedElm.scrollHeight + "px";
+          setTimeout(() => {
+            expandedElm.style.removeProperty("height");
+          }, duration);
+        } else {
+          expandedElm.style.height = expandedElm.scrollHeight + "px";
+          setTimeout(() => {
+            expandedElm.style.height = "0";
+          });
+        }
+      }
+      setExpanded((expanded) => !expanded);
     };
 
     return (
       <Box as="li" py={4} key={prevKey}>
-        {typeof itemRender === "function" ? (
-          itemRender(item)
-        ) : (
-          <UnstyledButton
-            onClick={handleClick}
-            as={"a"}
-            href={item.href as string}
-            {...(item.target && { target: item.target })}
-            // prefixIcon={<IconPointFilled size={12} />}
-          >
-            {item.label}
-          </UnstyledButton>
+        <UnstyledButton
+          onClick={handleClick}
+          as={"a"}
+          href={item.href as string}
+          prefixIcon={
+            childrenItems.length ? (
+              expanded ? (
+                <IconChevronDown size={16} />
+              ) : (
+                <IconChevronRight size={16} />
+              )
+            ) : null
+          }
+          {...(item.target && { target: item.target })}
+        >
+          {item.label}
+        </UnstyledButton>
+        {childrenItems.length > 0 && (
+          <MenuListRoot style={{ height: 0 }}>{childrenItems}</MenuListRoot>
         )}
-
-        {output.length > 0 && <Box as="ul">{output}</Box>}
       </Box>
     );
   };
-
-  const utilityClasses = generateUtilityClasses("Menu", []);
 
   return (
     <Box
@@ -65,14 +91,13 @@ export const Menu = ({ items, itemRender }: MenuProps) => {
         ul: {
           listStyle: "none",
           paddingInlineStart: 24,
-          transition: "all 0.25s",
         },
         "> ul": {
           paddingInlineStart: 0,
         },
         "> ul ul": {
-          height: 0,
-          overflow: "hidden",
+          transitionProperty: "all",
+          transitionDuration: duration / 1000 + "s",
         },
       }}
     >
