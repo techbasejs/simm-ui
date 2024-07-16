@@ -1,6 +1,7 @@
 import { IconInfoCircle, IconCircleCheck } from "@tabler/icons-react";
 import { Blockquote } from "./Blockquote";
 import { Title } from "../Title";
+import { Stack } from "../Stack/Stack";
 
 export default {
   component: Blockquote,
@@ -11,26 +12,23 @@ const iconInfo = <IconInfoCircle />;
 const iconCheck = <IconCircleCheck />;
 export function Default() {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        border: "1px solid #0000001f",
-        margin: "0 auto",
-        padding: "20px",
+    <Stack
+      sx={{
         backgroundColor: "#f8f9fa",
-        gap: "20px",
+        border: "1px solid #0000001f",
+        
       }}
+      spacing={20}
+      p={'20px'}
+      m={"0 auto"}
     >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          margin: "0 auto",
-          maxWidth: "400px",
+      <Stack
+        sx={{
           backgroundColor: "#f8f9fa",
-          gap: 50,
+          maxWidth: "400px",
         }}
+        spacing={50}
+        m={"0 auto"}
       >
         <Title>Usage</Title>
         <Blockquote
@@ -62,7 +60,7 @@ export function Default() {
           Life is like an npm install – you never know what you are going to
           get.
         </Blockquote>
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   );
 }
