@@ -22,4 +22,5 @@ export * from "./Slider";
 export * from "./Alert";
 export * from "./Divider";
 export * from "./Notification";
+export * from "./Blockquote";
 export * from "./Tabs";
