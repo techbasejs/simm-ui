@@ -18,6 +18,7 @@ import {
 import { SwitchProps } from "../components/Switch/Switch";
 import { grey } from "../colors/grey";
 import { shadows } from "@simm/theme";
+import { BadgeProps } from "../components/Badge";
 
 export type TypographyThemeProps = {
   color?: string;
@@ -44,7 +45,7 @@ export type ComponentType =
   | "Table"
   | "Text"
   | "Title"
-  | "Transition";
+  | "Badge";
 
 export type ComponentDefaultProps<T> = {
   defaultProps?: T;
@@ -95,6 +96,9 @@ export type ComponentCheckboxThemeProps = ComponentDefaultProps<CheckboxProps> &
 export type ComponentSwitchThemePtops = ComponentDefaultProps<SwitchProps> &
   ComponentStyleOverridesProps;
 
+export type ComponentBadgeThemePtops = ComponentDefaultProps<BadgeProps> &
+  ComponentStyleOverridesProps;
+
 export type UseThemeProps = {
   typography?: TypographyThemeProps;
   pallete?: {
@@ -139,6 +143,7 @@ export type UseThemeProps = {
     Transition?: ComponentTransitionThemeProps;
     Checkbox?: ComponentCheckboxThemeProps;
     Switch?: ComponentSwitchThemePtops;
+    Badge?: ComponentBadgeThemePtops;
   };
   breakpoints?: Breakpoints;
 };

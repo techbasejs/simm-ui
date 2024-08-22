@@ -22,7 +22,7 @@ export type BadgeProps = HTMLAttributes<HTMLElement> & {
   disableAnimation?: Boolean;
   isDot?: Boolean;
   isOneChar?: Boolean;
-  content?: ReactNode | ReactElement;
+  content?: string | number | ReactNode;
   showOutline?: Boolean;
 };
 
@@ -53,81 +53,81 @@ const getBadgeStylesBySize = (size?: BadgeSizeType): CSSObject => {
 };
 
 const getBadgeStylesByPlacement = (
-  placement?: BadgePlacementType,shape?:BadgeShapeType
+  placement?: BadgePlacementType,
+  shape?: BadgeShapeType,
 ): CSSObject => {
   let size = "5%";
 
-  if(shape =="circle") {
+  if (shape == "circle") {
     size = "10%";
   }
-    switch (placement) {
-       case "top-left": {
-         return {
-           left: size,
-           top: size,
-            "transform": "translate(-50%,-50%)"
-         };
-       }
-       case "bottom-left": {
-         return {
-           bottom: size,
-           left: size,
-           "transform": "translate(-50%,50%)"
-         };
-       }
-       case "bottom-right": {
-         return {
-           bottom: size,
-           right: size,
-           "transform": "translate(50%,50%)"
-         };
-       }
-       default: {
-         return {
-           right: size,
-           top: size,
-           "transform": "translate(50%,-50%)"
-         };
-       }
+  switch (placement) {
+    case "top-left": {
+      return {
+        left: size,
+        top: size,
+        transform: "translate(-50%,-50%)",
+      };
+    }
+    case "bottom-left": {
+      return {
+        bottom: size,
+        left: size,
+        transform: "translate(-50%,50%)",
+      };
+    }
+    case "bottom-right": {
+      return {
+        bottom: size,
+        right: size,
+        transform: "translate(50%,50%)",
+      };
+    }
+    default: {
+      return {
+        right: size,
+        top: size,
+        transform: "translate(50%,-50%)",
+      };
+    }
+  }
 };
-}
-const BadgeWrapper = styled(Stack)<HTMLAttributes<HTMLElement> & BadgeProps>((
+
+const BadgeItem = styled("div")<HTMLAttributes<HTMLElement> & BadgeProps>((
   props,
 ) => {
-  const { size, variant, shape,showOutline } = props;
+  const { variant, shape, showOutline, isInvisible } = props;
   const theme = useTheme();
   const color = props.color || "primary";
   const _color = theme.pallete?.[color];
   const badgeStyles: CSSObject = {
-    ...getBadgeStylesBySize(size),
     borderRadius: shape === "rectangle" ? "6px" : "50%",
-    backgroundColor: theme.pallete?.error?.main,
+    backgroundColor: isInvisible
+      ? "transparent"
+      : theme?.pallete?.common?.white,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
-    position: "relative",
+    overflow: "hidden",
   };
   if (showOutline === true) {
-    badgeStyles["borderWidth"]= "2px"
-    badgeStyles["borderColor"]= "transparent"
-
-  }else{
-    badgeStyles["borderWidth"]= "0"
-    badgeStyles["borderColor"]= "transparent"
+    badgeStyles["borderWidth"] = "2px";
+    badgeStyles["borderColor"] = "transparent";
+  } else {
+    badgeStyles["borderWidth"] = "0";
+    badgeStyles["borderColor"] = "transparent";
   }
 
   if (variant === "filled") {
     badgeStyles.backgroundColor = _color?.main;
     badgeStyles.color = _color?.constrastText;
     badgeStyles.border = "solid transparent";
-
   }
 
   if (variant === "outlined") {
     badgeStyles.borderStyle = `solid`;
     badgeStyles.borderColor = _color?.main;
-
   }
 
   if (variant === "transparent") {
@@ -138,7 +138,6 @@ const BadgeWrapper = styled(Stack)<HTMLAttributes<HTMLElement> & BadgeProps>((
     badgeStyles.color = _color?.main;
     badgeStyles.backgroundColor = _color?.constrastText;
     badgeStyles.border = "none";
-
   }
   return badgeStyles;
 });
@@ -147,21 +146,47 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
   props,
 ) => {
   const theme = useTheme();
-  const { color ,placement} = props;
+  const { color, placement } = props;
+
   let _color: ColorType | React.CSSProperties["color"] = color;
   if (color && theme.pallete?.[color as ColorType]) {
     _color = theme.pallete?.[color as ColorType]?.main;
   }
+  console.log(_color, color);
   return {
-    color: _color,
-    backgroundColor: theme?.pallete?.common?.white,
+    color: theme?.pallete?.common?.white,
+    backgroundColor: _color || theme.pallete?.error?.main,
+    position: "absolute",
+    ...getBadgeStylesByPlacement(placement),
+    borderRadius: "9999px",
+    fontSize: "0.875rem",
+    padding: "0px",
+    lineHeight: "1.25rem",
+    borderWidth: "2px",
+    whiteSpace: "nowrap",
+    width: "1.25rem",
+    height: "1.25rem",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
-    ...getBadgeStylesByPlacement(placement),
-    borderRadius: "50%",
-    padding:"2px"
+    zIndex: 10,
+    placeContent: "center",
+    borderColor: "#333",
+    borderStyle: "solid",
+    boxSizing: "border-box",
+  };
+});
+
+const BadgeWrapper = styled(Stack)<HTMLAttributes<HTMLElement> & BadgeProps>((
+  props,
+) => {
+  const theme = useTheme();
+  const { size } = props;
+
+  return {
+    ...getBadgeStylesBySize(size),
+    position: "relative",
+    maxWidth: "max-content",
   };
 });
 
@@ -170,9 +195,11 @@ export const Badge = createPolymorphicComponent<HTMLDivElement, BadgeProps>(
     const { children, content, ...propsBadge } = props;
 
     return (
-      <BadgeWrapper ref={ref} {...propsBadge}>
-        {content && <BadgeIcon>{content}</BadgeIcon>}
-        {children}
+      <BadgeWrapper {...props}>
+        <BadgeItem {...props} ref={ref}>
+          {content && <BadgeIcon {...props}>{content}</BadgeIcon>}
+          {children}
+        </BadgeItem>
       </BadgeWrapper>
     );
   },
