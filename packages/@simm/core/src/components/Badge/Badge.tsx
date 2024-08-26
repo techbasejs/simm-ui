@@ -2,9 +2,9 @@ import styled, { CSSObject } from "@emotion/styled";
 import { createPolymorphicComponent } from "../Box";
 import { useTheme } from "../../theme";
 import { colors } from "@simm/theme";
-import { HTMLAttributes, ReactElement, ReactNode } from "react";
+import { HTMLAttributes, ReactElement, ReactNode, useMemo } from "react";
 import { Stack } from "../Stack";
-import { ColorType, VariantType } from "../../types/types";
+import { ColorType } from "../../types/types";
 export type BadgeSizeType = "sm" | "md" | "lg";
 export type BadgeShapeType = "rectangle" | "circle";
 export type BadgePlacementType =
@@ -12,18 +12,19 @@ export type BadgePlacementType =
   | "top-left"
   | "bottom-right"
   | "bottom-left";
-export type BadgeProps = HTMLAttributes<HTMLElement> & {
+
+export type BadgeProps = {
   size?: BadgeSizeType;
   shape?: BadgeShapeType;
-  variant?: VariantType;
   color?: ColorType;
   placement?: BadgePlacementType;
   isInvisible?: Boolean;
   disableAnimation?: Boolean;
   isDot?: Boolean;
   isOneChar?: Boolean;
-  content?: string | number | ReactNode;
+  badgeContent?: number | string | ReactNode;
   showOutline?: Boolean;
+  children: ReactNode;
 };
 
 const getBadgeStylesBySize = (size?: BadgeSizeType): CSSObject => {
@@ -52,14 +53,60 @@ const getBadgeStylesBySize = (size?: BadgeSizeType): CSSObject => {
   }
 };
 
+const getBadgeStylesByOneChar = (size?: BadgeSizeType): CSSObject => {
+  switch (size) {
+    case "sm": {
+      return {
+        width: "1rem",
+        height: "1rem",
+      };
+    }
+    case "lg": {
+      return {
+        height: "1.5rem",
+        width: "1.5rem",
+      };
+    }
+    default: {
+      return {
+        width: "1.25rem",
+        height: "1.25rem",
+      };
+    }
+  }
+};
+
+const getBadgeStylesByIsDot = (size?: BadgeSizeType): CSSObject => {
+  switch (size) {
+    case "sm": {
+      return {
+        width: "0.75rem",
+        height: "0.75rem",
+      };
+    }
+    case "lg": {
+      return {
+        height: "1rem",
+        width: "1rem",
+      };
+    }
+    default: {
+      return {
+        width: "0.875rem",
+        height: "0.875rem",
+      };
+    }
+  }
+};
+
 const getBadgeStylesByPlacement = (
   placement?: BadgePlacementType,
   shape?: BadgeShapeType,
 ): CSSObject => {
-  let size = "5%";
+  let size = "10%";
 
   if (shape == "circle") {
-    size = "10%";
+    size = "15%";
   }
   switch (placement) {
     case "top-left": {
@@ -93,52 +140,41 @@ const getBadgeStylesByPlacement = (
   }
 };
 
-const BadgeItem = styled("div")<HTMLAttributes<HTMLElement> & BadgeProps>((
+const BadgeItem = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
   props,
 ) => {
-  const { variant, shape, showOutline, isInvisible } = props;
+  const { shape, isInvisible, disableAnimation, size } = props;
   const theme = useTheme();
-  const color = props.color || "primary";
-  const _color = theme.pallete?.[color];
   const badgeStyles: CSSObject = {
-    borderRadius: shape === "rectangle" ? "6px" : "50%",
+    borderRadius: shape === "rectangle" ? "6px" : "9999px",
     backgroundColor: isInvisible
       ? "transparent"
       : theme?.pallete?.common?.white,
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
     overflow: "hidden",
+    flexShrink: 0,
+    zIndex: 10,
+    flexWrap: "wrap",
+    boxSizing: "border-box",
+    whiteSpace: "nowrap",
+    placeContent: "center",
+    transformOrigin: "center",
+    color: "inherit",
+    userSelect: "none",
+    fontWeight: "400",
+    position: "relative",
+    ...getBadgeStylesBySize(size),
   };
-  if (showOutline === true) {
-    badgeStyles["borderWidth"] = "2px";
-    badgeStyles["borderColor"] = "transparent";
+
+  if (disableAnimation === true) {
+    badgeStyles["transition"] = "none";
   } else {
-    badgeStyles["borderWidth"] = "0";
-    badgeStyles["borderColor"] = "transparent";
+    badgeStyles["transitionDuration"] = "300ms !important";
+    badgeStyles["transitionTimingFunction"] =
+      "cubic-bezier(0.34, 1.56, 0.64, 1)";
   }
 
-  if (variant === "filled") {
-    badgeStyles.backgroundColor = _color?.main;
-    badgeStyles.color = _color?.constrastText;
-    badgeStyles.border = "solid transparent";
-  }
-
-  if (variant === "outlined") {
-    badgeStyles.borderStyle = `solid`;
-    badgeStyles.borderColor = _color?.main;
-  }
-
-  if (variant === "transparent") {
-    badgeStyles.borderColor = "transparent";
-  }
-
-  if (variant === "default") {
-    badgeStyles.color = _color?.main;
-    badgeStyles.backgroundColor = _color?.constrastText;
-    badgeStyles.border = "none";
-  }
   return badgeStyles;
 });
 
@@ -146,60 +182,92 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
   props,
 ) => {
   const theme = useTheme();
-  const { color, placement } = props;
+  const {
+    color,
+    placement,
+    showOutline,
+    isInvisible,
+    size,
+    isOneChar,
+    isDot,
+    badgeContent,
+  } = props;
 
-  let _color: ColorType | React.CSSProperties["color"] = color;
-  if (color && theme.pallete?.[color as ColorType]) {
-    _color = theme.pallete?.[color as ColorType]?.main;
-  }
-  console.log(_color, color);
-  return {
+  const _color = theme.pallete?.[color ?? "primary"];
+  const badgeStylesByOneChar = useMemo(() => {
+    if (String(badgeContent)?.length === 1 || isOneChar) {
+      return {
+        ...getBadgeStylesByOneChar(size),
+      };
+    }
+    return {};
+  }, [badgeContent, isOneChar]);
+  const objBadgeStylesByIsDot = useMemo(() => {
+    if (String(badgeContent)?.length === 0 || isDot) {
+      return {
+        ...getBadgeStylesByIsDot(size),
+      };
+    }
+    return {};
+  }, [badgeContent]);
+
+  const badgeStyles: CSSObject = {
     color: theme?.pallete?.common?.white,
-    backgroundColor: _color || theme.pallete?.error?.main,
+    backgroundColor: _color?.main || theme.pallete?.error?.main,
     position: "absolute",
     ...getBadgeStylesByPlacement(placement),
     borderRadius: "9999px",
-    fontSize: "0.875rem",
+    fontSize: "0.75rem",
     padding: "0px",
-    lineHeight: "1.25rem",
-    borderWidth: "2px",
+    lineHeight: "1rem",
     whiteSpace: "nowrap",
-    width: "1.25rem",
-    height: "1.25rem",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     zIndex: 10,
     placeContent: "center",
-    borderColor: "#333",
     borderStyle: "solid",
     boxSizing: "border-box",
+    paddingLeft: "0.25rem",
+    paddingRight: "0.25rem",
+    cursor: "default",
+    scale: isInvisible ? 0 : 1,
+    opacity: isInvisible ? 0 : 1,
+    ...objBadgeStylesByIsDot,
+    ...badgeStylesByOneChar,
   };
+
+  if (showOutline === true) {
+    badgeStyles["borderWidth"] = "2px";
+    badgeStyles["borderColor"] = "#333";
+  } else {
+    badgeStyles["borderWidth"] = "0px";
+    badgeStyles["borderColor"] = "transparent";
+  }
+
+  return badgeStyles;
 });
 
 const BadgeWrapper = styled(Stack)<HTMLAttributes<HTMLElement> & BadgeProps>((
   props,
 ) => {
-  const theme = useTheme();
-  const { size } = props;
-
   return {
-    ...getBadgeStylesBySize(size),
     position: "relative",
-    maxWidth: "max-content",
+    display: "inline-flex",
+    flexShrink: 0,
   };
 });
 
 export const Badge = createPolymorphicComponent<HTMLDivElement, BadgeProps>(
   (props, ref) => {
-    const { children, content, ...propsBadge } = props;
+    const { children, badgeContent, ...propsBadge } = props;
 
     return (
       <BadgeWrapper {...props}>
         <BadgeItem {...props} ref={ref}>
-          {content && <BadgeIcon {...props}>{content}</BadgeIcon>}
           {children}
         </BadgeItem>
+        <BadgeIcon {...props}>{badgeContent}</BadgeIcon>
       </BadgeWrapper>
     );
   },
