@@ -1,8 +1,7 @@
 import styled, { CSSObject } from "@emotion/styled";
 import { createPolymorphicComponent } from "../Box";
 import { useTheme } from "../../theme";
-import { colors } from "@simm/theme";
-import { HTMLAttributes, ReactElement, ReactNode, useMemo } from "react";
+import { HTMLAttributes, ReactNode, useMemo } from "react";
 import { Stack } from "../Stack";
 import { ColorType } from "../../types/types";
 export type BadgeSizeType = "sm" | "md" | "lg";
@@ -215,7 +214,6 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
     color: theme?.pallete?.common?.white,
     backgroundColor: _color?.main || theme.pallete?.error?.main,
     position: "absolute",
-    ...getBadgeStylesByPlacement(placement),
     borderRadius: "9999px",
     fontSize: "0.75rem",
     padding: "0px",
@@ -235,11 +233,12 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
     opacity: isInvisible ? 0 : 1,
     ...objBadgeStylesByIsDot,
     ...badgeStylesByOneChar,
+    ...getBadgeStylesByPlacement(placement),
   };
 
   if (showOutline === true) {
     badgeStyles["borderWidth"] = "2px";
-    badgeStyles["borderColor"] = "#333";
+    badgeStyles["borderColor"] = theme.pallete?.grey?.[700];
   } else {
     badgeStyles["borderWidth"] = "0px";
     badgeStyles["borderColor"] = "transparent";
@@ -260,7 +259,7 @@ const BadgeWrapper = styled(Stack)<HTMLAttributes<HTMLElement> & BadgeProps>((
 
 export const Badge = createPolymorphicComponent<HTMLDivElement, BadgeProps>(
   (props, ref) => {
-    const { children, badgeContent, ...propsBadge } = props;
+    const { children, badgeContent } = props;
 
     return (
       <BadgeWrapper {...props}>
