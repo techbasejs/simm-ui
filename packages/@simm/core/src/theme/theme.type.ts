@@ -45,6 +45,7 @@ export type ComponentType =
   | "Table"
   | "Text"
   | "Title"
+  | "Transition"
   | "Badge";
 
 export type ComponentDefaultProps<T> = {
