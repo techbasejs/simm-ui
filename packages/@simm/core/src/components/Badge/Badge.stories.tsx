@@ -19,7 +19,7 @@ export function Default() {
           flexWrap: "wrap",
         }}
       >
-        <Badge color="secondary" shape="rectangle" badgeContent="">
+        <Badge color="secondary" shape="rectangle" variant="outlined"  isDot={true}>
           <Avatar
             radius="md"
             shape="square"

@@ -4,6 +4,7 @@ import { useTheme } from "../../theme";
 import { HTMLAttributes, ReactNode, useMemo } from "react";
 import { Stack } from "../Stack";
 import { ColorType } from "../../types/types";
+
 export type BadgeSizeType = "sm" | "md" | "lg";
 export type BadgeShapeType = "rectangle" | "circle";
 export type BadgePlacementType =
@@ -11,6 +12,7 @@ export type BadgePlacementType =
   | "top-left"
   | "bottom-right"
   | "bottom-left";
+export type BadgeVariantType = "outlined" | "contained";
 
 export type BadgeProps = {
   size?: BadgeSizeType;
@@ -20,9 +22,8 @@ export type BadgeProps = {
   isInvisible?: Boolean;
   disableAnimation?: Boolean;
   isDot?: Boolean;
-  isOneChar?: Boolean;
-  badgeContent?: number | string | ReactNode;
-  showOutline?: Boolean;
+  badgeContent?: ReactNode;
+  variant?: BadgeVariantType;
   children: ReactNode;
 };
 
@@ -168,7 +169,7 @@ const BadgeItem = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
 
   if (disableAnimation === true) {
     badgeStyles["transition"] = "none";
-  } else {
+  } else if (!disableAnimation) {
     badgeStyles["transitionDuration"] = "300ms !important";
     badgeStyles["transitionTimingFunction"] =
       "cubic-bezier(0.34, 1.56, 0.64, 1)";
@@ -181,26 +182,20 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
   props,
 ) => {
   const theme = useTheme();
-  const {
-    color,
-    placement,
-    showOutline,
-    isInvisible,
-    size,
-    isOneChar,
-    isDot,
-    badgeContent,
-  } = props;
+  const { color, placement, variant, isInvisible, size, isDot, badgeContent } =
+    props;
 
   const _color = theme.pallete?.[color ?? "primary"];
+
   const badgeStylesByOneChar = useMemo(() => {
-    if (String(badgeContent)?.length === 1 || isOneChar) {
+    if (String(badgeContent)?.length === 1) {
       return {
         ...getBadgeStylesByOneChar(size),
       };
     }
     return {};
-  }, [badgeContent, isOneChar]);
+  }, [badgeContent]);
+
   const objBadgeStylesByIsDot = useMemo(() => {
     if (String(badgeContent)?.length === 0 || isDot) {
       return {
@@ -236,7 +231,7 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
     ...getBadgeStylesByPlacement(placement),
   };
 
-  if (showOutline === true) {
+  if (variant === "outlined") {
     badgeStyles["borderWidth"] = "2px";
     badgeStyles["borderColor"] = theme.pallete?.grey?.[700];
   } else {
