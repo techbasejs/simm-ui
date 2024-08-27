@@ -1,6 +1,6 @@
 import { Badge } from "./Badge";
 import { Avatar } from "../Avatar";
-import { IconDownload } from "@tabler/icons-react";
+import { IconMail } from "@tabler/icons-react";
 
 export default {
   component: Badge,
@@ -19,14 +19,31 @@ export function Default() {
           flexWrap: "wrap",
         }}
       >
-        <Badge color="secondary" shape="rectangle" variant="outlined"  isDot={true}>
+        <Badge color="secondary" shape="rectangle" badgeContent=" " >
           <Avatar
             radius="md"
             shape="square"
             src="https://i.pravatar.cc/150?u=a042f81f4e29026024d"
           />
         </Badge>
-        <Badge badgeContent="11" color="warning" shape="rectangle">
+        <Badge
+          color="secondary"
+          shape="rectangle"
+          badgeContent=""
+          isAnimation={true}
+        >
+          <Avatar
+            radius="md"
+            shape="square"
+            src="https://i.pravatar.cc/150?u=a042f81f4e29026024d"
+          />
+        </Badge>
+        <Badge
+          badgeContent="11"
+          color="warning"
+          shape="rectangle"
+          variant="outlined"
+        >
           <Avatar
             radius="md"
             src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
@@ -38,14 +55,19 @@ export function Default() {
             src="https://i.pravatar.cc/150?u=a04258114e29026708c"
           />
         </Badge>
-        <Badge badgeContent="5" color="warning" placement="top-right">
+        <Badge badgeContent="5" color="warning" placement="top-right" isAnimation={true}>
           <Avatar
             isBordered
             radius="md"
             src="https://i.pravatar.cc/150?u=a042f81f4e29026024d"
           />
         </Badge>
-        <Badge badgeContent="5" color="primary" placement="bottom-right">
+        <Badge
+          badgeContent="5"
+          color="primary"
+          placement="bottom-right"
+          variant="outlined"
+        >
           <Avatar
             isBordered
             radius="md"
@@ -80,16 +102,14 @@ export function Default() {
             src="https://i.pravatar.cc/300?u=a042581f4e29026709d"
           />
         </Badge>
-        <Badge
-          color="secondary"
-          badgeContent={5}
-          isInvisible={false}
-          shape="circle"
-        >
-          <IconDownload className="fill-current" size={30} />
+        <Badge color="secondary" badgeContent={5} shape="circle" >
+          <IconMail className="fill-current" size={40} />
         </Badge>
-        <Badge color="info" badgeContent={5} isInvisible={true} shape="circle">
-          <IconDownload className="fill-current" size={30} />
+        <Badge color="info" shape="circle">
+          <IconMail className="fill-current" size={40} />
+        </Badge>
+        <Badge color="info" shape="circle" badgeContent="" size="lg">
+          <IconMail className="fill-current" size={70} />
         </Badge>
         <Badge badgeContent="new" color="primary" size="lg">
           <Avatar

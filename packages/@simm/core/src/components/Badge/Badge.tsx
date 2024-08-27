@@ -19,9 +19,7 @@ export type BadgeProps = {
   shape?: BadgeShapeType;
   color?: ColorType;
   placement?: BadgePlacementType;
-  isInvisible?: Boolean;
-  disableAnimation?: Boolean;
-  isDot?: Boolean;
+  isAnimation?: Boolean;
   badgeContent?: ReactNode;
   variant?: BadgeVariantType;
   children: ReactNode;
@@ -143,13 +141,11 @@ const getBadgeStylesByPlacement = (
 const BadgeItem = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
   props,
 ) => {
-  const { shape, isInvisible, disableAnimation, size } = props;
+  const { shape, size } = props;
   const theme = useTheme();
   const badgeStyles: CSSObject = {
     borderRadius: shape === "rectangle" ? "6px" : "9999px",
-    backgroundColor: isInvisible
-      ? "transparent"
-      : theme?.pallete?.common?.white,
+    backgroundColor: theme?.pallete?.common?.white,
     display: "flex",
     alignItems: "center",
     overflow: "hidden",
@@ -167,14 +163,6 @@ const BadgeItem = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
     ...getBadgeStylesBySize(size),
   };
 
-  if (disableAnimation === true) {
-    badgeStyles["transition"] = "none";
-  } else if (!disableAnimation) {
-    badgeStyles["transitionDuration"] = "300ms !important";
-    badgeStyles["transitionTimingFunction"] =
-      "cubic-bezier(0.34, 1.56, 0.64, 1)";
-  }
-
   return badgeStyles;
 });
 
@@ -182,8 +170,7 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
   props,
 ) => {
   const theme = useTheme();
-  const { color, placement, variant, isInvisible, size, isDot, badgeContent } =
-    props;
+  const { color, placement, variant, size, badgeContent, isAnimation } = props;
 
   const _color = theme.pallete?.[color ?? "primary"];
 
@@ -197,7 +184,7 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
   }, [badgeContent]);
 
   const objBadgeStylesByIsDot = useMemo(() => {
-    if (String(badgeContent)?.length === 0 || isDot) {
+    if (String(badgeContent)?.length === 0) {
       return {
         ...getBadgeStylesByIsDot(size),
       };
@@ -205,7 +192,7 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
     return {};
   }, [badgeContent]);
 
-  const badgeStyles: CSSObject = {
+  let badgeStyles: CSSObject = {
     color: theme?.pallete?.common?.white,
     backgroundColor: _color?.main || theme.pallete?.error?.main,
     position: "absolute",
@@ -224,8 +211,8 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
     paddingLeft: "0.25rem",
     paddingRight: "0.25rem",
     cursor: "default",
-    scale: isInvisible ? 0 : 1,
-    opacity: isInvisible ? 0 : 1,
+    scale: 1,
+    opacity: 1,
     ...objBadgeStylesByIsDot,
     ...badgeStylesByOneChar,
     ...getBadgeStylesByPlacement(placement),
@@ -238,7 +225,42 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
     badgeStyles["borderWidth"] = "0px";
     badgeStyles["borderColor"] = "transparent";
   }
-
+  if (isAnimation === true) {
+    const pulse = {
+      "@keyframes pulse": {
+        "0%": {
+          transform: "scale(1)",
+          opacity: 1,
+        },
+        "50%": {
+          transform: "scale(1.3)",
+          opacity: 0.4,
+        },
+        "100%": {
+          transform: "scale(1.4)",
+          opacity: 0,
+        },
+      },
+    };
+    badgeStyles = {
+      ...badgeStyles,
+      "&::before": {
+        ...pulse,
+        content: "''",
+        display: "block",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: "9999px",
+        border: `3px solid ${_color?.main || theme.pallete?.error?.main}`,
+        animation: "pulse 1s ease infinite",
+      },
+    };
+  } else if (!isAnimation) {
+    badgeStyles["transition"] = "none";
+  }
   return badgeStyles;
 });
 
