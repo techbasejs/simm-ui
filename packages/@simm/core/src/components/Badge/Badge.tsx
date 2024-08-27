@@ -225,7 +225,7 @@ const BadgeIcon = styled("span")<HTMLAttributes<HTMLElement> & BadgeProps>((
     badgeStyles["borderWidth"] = "0px";
     badgeStyles["borderColor"] = "transparent";
   }
-  if (isAnimation === true) {
+  if (isAnimation) {
     const pulse = {
       "@keyframes pulse": {
         "0%": {
