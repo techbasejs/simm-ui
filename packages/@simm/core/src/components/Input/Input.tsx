@@ -1,11 +1,12 @@
 import styled, { CSSObject } from "@emotion/styled";
-import { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes, useState } from "react";
 import { blue } from "../../colors/blue";
 import { useTheme } from "../../theme/useTheme";
 import { Box, createPolymorphicComponent } from "../Box";
 import isPropValid from "@emotion/is-prop-valid";
 import { InputPassword } from "./InputPassword/InputPassword";
 import { InputNumber } from "./InputNumber/InputNumber";
+import { IconCircleXFilled } from "@tabler/icons-react";
 
 export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   variant?: "default" | "unstyled" | "filled";
@@ -13,6 +14,8 @@ export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   height?: number;
   prefixIcon?: React.ReactNode;
   suffixIcon?: React.ReactNode;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  allowClear?: boolean;
 };
 
 const InputWrapperStyled = styled.div<InputProps>((props) => {
@@ -75,22 +78,40 @@ const InputStyled = styled(Box, {
 const IconWrapperStyled = styled.div<{
   isPrefixIcon?: boolean;
   isSuffixIcon?: boolean;
-}>(({ isPrefixIcon, isSuffixIcon }) => ({
+  isClearIcon?: boolean;
+  existSuffixIcon?: boolean;
+}>(({ isPrefixIcon, isSuffixIcon, isClearIcon, existSuffixIcon }) => ({
   position: "absolute",
+  width: 32,
   ...(isPrefixIcon && { left: 0 }),
   ...(isSuffixIcon && { right: 0 }),
+  ...(isClearIcon && { right: existSuffixIcon ? 28 : 8, width: 16, color: "#bebebe", cursor: "pointer" }),
   top: 0,
   zIndex: 2,
-  width: 32,
   height: "100%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  ":hover": {
+    ...(isClearIcon && { color: "#8e8e8e", transition: "all 0.2s" })
+  }
 }));
 
 const _Input = createPolymorphicComponent<HTMLInputElement, InputProps>(
   (props, ref) => {
-    const { prefixIcon, suffixIcon, width, height, ...rest } = props;
+    const { prefixIcon, suffixIcon, allowClear, onChange, width, height, ...rest } = props;
+    const [showIconClear, setShowIconClear] = useState(false);
+    const [inputValue, setInputValue] = useState("");
+    const _onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange?.(e);
+      setInputValue(e.target.value);
+      setShowIconClear(!!e.target.value);
+    }
+
+    const clearValue = () => {
+      setInputValue("");
+      setShowIconClear(false);
+    }
     return (
       <InputWrapperStyled width={width} height={height}>
         {prefixIcon && (
@@ -101,8 +122,15 @@ const _Input = createPolymorphicComponent<HTMLInputElement, InputProps>(
           ref={ref}
           prefixIcon={prefixIcon}
           suffixIcon={prefixIcon}
+          value={inputValue}
+          onChange={_onChange}
           {...rest}
         />
+        {(allowClear && showIconClear) && (
+          <IconWrapperStyled isClearIcon existSuffixIcon={!!suffixIcon} onClick={clearValue}>
+            {<IconCircleXFilled size={18} />}
+          </IconWrapperStyled>
+        )}
         {suffixIcon && (
           <IconWrapperStyled isSuffixIcon>{suffixIcon}</IconWrapperStyled>
         )}
