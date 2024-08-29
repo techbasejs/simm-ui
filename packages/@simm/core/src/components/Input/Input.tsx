@@ -7,6 +7,7 @@ import isPropValid from "@emotion/is-prop-valid";
 import { InputPassword } from "./InputPassword/InputPassword";
 import { InputNumber } from "./InputNumber/InputNumber";
 import { IconCircleXFilled } from "@tabler/icons-react";
+import { ColorType } from "../../types/types";
 
 export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   variant?: "default" | "unstyled" | "filled";
@@ -16,6 +17,7 @@ export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   suffixIcon?: React.ReactNode;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   allowClear?: boolean;
+  clearIconColor?: ColorType;
 };
 
 const InputWrapperStyled = styled.div<InputProps>((props) => {
@@ -80,26 +82,31 @@ const IconWrapperStyled = styled.div<{
   isSuffixIcon?: boolean;
   isClearIcon?: boolean;
   existSuffixIcon?: boolean;
-}>(({ isPrefixIcon, isSuffixIcon, isClearIcon, existSuffixIcon }) => ({
-  position: "absolute",
-  width: 32,
-  ...(isPrefixIcon && { left: 0 }),
-  ...(isSuffixIcon && { right: 0 }),
-  ...(isClearIcon && { right: existSuffixIcon ? 28 : 8, width: 16, color: "#bebebe", cursor: "pointer" }),
-  top: 0,
-  zIndex: 2,
-  height: "100%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  ":hover": {
-    ...(isClearIcon && { color: "#8e8e8e", transition: "all 0.2s" })
+  clearIconColor?: ColorType;
+}>(({ isPrefixIcon, isSuffixIcon, isClearIcon, existSuffixIcon, clearIconColor }) => {
+  const _clearIconColor = clearIconColor && useTheme().pallete?.[clearIconColor]?.light || useTheme().pallete?.["grey"]?.[800];
+  const _clearIconColorHover = clearIconColor && useTheme().pallete?.[clearIconColor]?.dark || useTheme().pallete?.["grey"]?.[900];
+  return {
+    position: "absolute",
+    width: 32,
+    ...(isPrefixIcon && { left: 0 }),
+    ...(isSuffixIcon && { right: 0 }),
+    ...(isClearIcon && { right: existSuffixIcon ? 28 : 8, width: 16, color: _clearIconColor, cursor: "pointer" }),
+    top: 0,
+    zIndex: 2,
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    ":hover": {
+      ...(isClearIcon && { color: _clearIconColorHover, transition: "all 0.2s" })
+    }
   }
-}));
+});
 
 const _Input = createPolymorphicComponent<HTMLInputElement, InputProps>(
   (props, ref) => {
-    const { prefixIcon, suffixIcon, allowClear, onChange, width, height, ...rest } = props;
+    const { prefixIcon, suffixIcon, allowClear, onChange, width, clearIconColor, height, ...rest } = props;
     const [showIconClear, setShowIconClear] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const _onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +115,7 @@ const _Input = createPolymorphicComponent<HTMLInputElement, InputProps>(
       setShowIconClear(!!e.target.value);
     }
 
-    const clearValue = () => {
+    const handleClearValue = () => {
       setInputValue("");
       setShowIconClear(false);
     }
@@ -127,7 +134,7 @@ const _Input = createPolymorphicComponent<HTMLInputElement, InputProps>(
           {...rest}
         />
         {(allowClear && showIconClear) && (
-          <IconWrapperStyled isClearIcon existSuffixIcon={!!suffixIcon} onClick={clearValue}>
+          <IconWrapperStyled isClearIcon existSuffixIcon={!!suffixIcon} clearIconColor={clearIconColor} onClick={handleClearValue}>
             {<IconCircleXFilled size={18} />}
           </IconWrapperStyled>
         )}
