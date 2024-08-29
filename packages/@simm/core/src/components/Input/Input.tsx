@@ -85,8 +85,8 @@ const IconWrapperStyled = styled.div<{
   clearIconColor?: ColorType;
 }>(({ isPrefixIcon, isSuffixIcon, isClearIcon, existSuffixIcon, clearIconColor }) => {
   const theme = useTheme();
-  const _clearIconColor = clearIconColor && theme.pallete?.[clearIconColor]?.light || theme.pallete?.["grey"]?.[800];
-  const _clearIconColorHover = clearIconColor && theme.pallete?.[clearIconColor]?.dark || theme.pallete?.["grey"]?.[900];
+  const _clearIconColor = clearIconColor ? theme.pallete?.[clearIconColor]?.light : theme.pallete?.["grey"]?.[800];
+  const _clearIconColorHover = clearIconColor ? theme.pallete?.[clearIconColor]?.dark : theme.pallete?.["grey"]?.[900];
   return {
     position: "absolute",
     width: 32,
