@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
-import { IconChevronCompactDown } from "@tabler/icons-react";
+import { IconChevronDown } from "@tabler/icons-react";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { useTheme } from "../../theme";
 
 const StyledUl = styled.ul(() => {
   return {
@@ -10,15 +11,17 @@ const StyledUl = styled.ul(() => {
 });
 
 const StyledLi = styled.li<{ disabled?: boolean }>((props) => {
+  const theme = useTheme();
   return {
     listStyle: "none",
-    borderBottom: "1px solid #f0f0f0",
+    borderBottom: `1px solid ${theme.pallete?.divider}`,
     opacity: props.disabled ? 0.5 : 1,
-    pointerEvents: props.disabled ? "none" : undefined,
+    pointerEvents: props.disabled ? "none" : "auto",
   };
 });
 
 const StyledHeader = styled.header(() => {
+  const theme = useTheme();
   return {
     display: "flex",
     alignItems: "center",
@@ -26,12 +29,12 @@ const StyledHeader = styled.header(() => {
     cursor: "pointer",
     padding: "4px",
     "&:hover": {
-      backgroundColor: "#f0f0f0",
+      backgroundColor: theme.pallete?.background?.primary,
     },
   };
 });
 
-const StyledIcon = styled(IconChevronCompactDown)(({
+const StyledIcon = styled(IconChevronDown)(({
   open,
 }: {
   open: boolean;
