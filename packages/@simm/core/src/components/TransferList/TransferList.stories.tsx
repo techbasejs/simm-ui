@@ -30,6 +30,7 @@ export function Default() {
           },
         ]}
         listRight={[]}
+        title="List title"
       ></TransferList>
     </Stack>
   );

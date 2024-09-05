@@ -75,6 +75,8 @@ export const TransferList = createPolymorphicComponent<
     left: [],
     right: [],
   });
+  const [checkAllLeft, setCheckAllLeft] = useState(true);
+  const [checkAllRight, setCheckAllRight] = useState(true);
   const [left, setLeft] = useState<TransferListItemProps[]>(() =>
     listLeft.map((item) => ({ ...item, id: generateRandomKey() })),
   );
@@ -172,18 +174,66 @@ export const TransferList = createPolymorphicComponent<
     setRight([]);
   };
 
+  const handleOnChangeAllLeftChecked = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (e.target.checked) {
+      setCheckAllLeft(false);
+      setListChecked((prev) => {
+        return {
+          ...prev,
+          left: [...left],
+        };
+      });
+    } else {
+      setCheckAllLeft(true);
+      setListChecked((prev) => {
+        return {
+          ...prev,
+          left: [],
+        };
+      });
+    }
+  };
+
+  const handleOnChangeAllRightChecked = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (e.target.checked) {
+      setCheckAllRight(false);
+      setListChecked((prev) => {
+        return {
+          ...prev,
+          right: [...right],
+        };
+      });
+    } else {
+      setCheckAllRight(true);
+      setListChecked((prev) => {
+        return {
+          ...prev,
+          right: [],
+        };
+      });
+    }
+  };
+
   const theme = useTheme();
   return (
     <WrapperTransferList ref={ref}>
       <WrapperItemStyled theme={theme}>
         <ItemStyled theme={theme}>
-          <Checkbox value={"ALL"} label={title} />
-          hhhhhh
+          <Checkbox
+            onChange={(e) => handleOnChangeAllLeftChecked(e)}
+            value={"ALL_LEFT"}
+            label={title}
+          />
         </ItemStyled>
         <Divider />
         {left.map((item) => (
           <ItemStyled theme={theme} key={item.id}>
             <Checkbox
+              checked={listChecked.left.some((value) => value.id === item.id)}
               value={item.value}
               onChange={(e) => handleOnChangeChecked(e, item, "Left")}
               label={item.label}
@@ -196,7 +246,7 @@ export const TransferList = createPolymorphicComponent<
           <IconButton
             variant="outlined"
             onClick={handleAllRight}
-            disabled={left.length === 0}
+            disabled={checkAllLeft}
           >
             <IconChevronsRight size={18} />
           </IconButton>
@@ -212,7 +262,7 @@ export const TransferList = createPolymorphicComponent<
           <IconButton
             variant="outlined"
             onClick={handleAllLeft}
-            disabled={right.length === 0}
+            disabled={checkAllRight}
           >
             <IconChevronsLeft size={18} />
           </IconButton>
@@ -226,9 +276,18 @@ export const TransferList = createPolymorphicComponent<
         </IconButton>
       </Stack>
       <WrapperItemStyled theme={theme}>
+        <ItemStyled theme={theme}>
+          <Checkbox
+            value={"ALL_RIGHT"}
+            onChange={handleOnChangeAllRightChecked}
+            label={title}
+          />
+        </ItemStyled>
+        <Divider />
         {right.map((item) => (
           <ItemStyled theme={theme} key={item.id}>
             <Checkbox
+              checked={listChecked.right.some((value) => value.id === item.id)}
               value={item.value}
               label={item.label}
               onChange={(e) => handleOnChangeChecked(e, item, "Right")}
