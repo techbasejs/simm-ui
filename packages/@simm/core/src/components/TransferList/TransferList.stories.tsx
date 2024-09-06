@@ -9,7 +9,7 @@ export default {
 
 export function Default() {
   return (
-    <Stack spacing={10}>
+    <Stack spacing={10} sx={{ maxWidth: "500px" }}>
       <TransferList
         listLeft={[
           {
