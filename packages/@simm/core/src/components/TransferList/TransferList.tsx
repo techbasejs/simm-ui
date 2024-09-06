@@ -28,7 +28,8 @@ export interface TransferListProps {
   listLeft: TransferListItemProps[];
   title?: string;
   isSubheader?: boolean;
-  isDisabledBtnAll?: boolean;
+  isShowSelectAll?: boolean;
+  isShowItemPerTotal?: boolean;
 }
 
 const WrapperItemStyled = styled.div<{ theme: UseThemeProps }>(({ theme }) => ({
@@ -83,7 +84,8 @@ export const TransferList = createPolymorphicComponent<
   HTMLDivElement,
   TransferListProps
 >((props, ref) => {
-  const { listLeft, listRight, title, isDisabledBtnAll } = props;
+  const { listLeft, listRight, title, isShowSelectAll, isShowItemPerTotal } =
+    props;
   const [listChecked, setListChecked] = useState<{
     left: ItemPropsI[];
     right: ItemPropsI[];
@@ -267,7 +269,7 @@ export const TransferList = createPolymorphicComponent<
   return (
     <WrapperTransferList ref={ref}>
       <WrapperItemStyled theme={theme}>
-        {!isDisabledBtnAll && (
+        {!isShowSelectAll ? (
           <>
             <ItemStyled theme={theme}>
               <Checkbox
@@ -278,12 +280,12 @@ export const TransferList = createPolymorphicComponent<
                 }
                 onChange={(e) => handleOnChangeAllLeftChecked(e)}
                 value={"ALL_LEFT"}
-                label={`${listChecked.left.length}/${left.length} ${title}`}
+                label={`${isShowItemPerTotal ? listChecked.left.length + "/" + left.length : ""} ${title}`}
               />
             </ItemStyled>
             <Divider />
           </>
-        )}
+        ) : null}
         <WrapperListStyled theme={theme}>
           {left.map((item) => (
             <ItemStyled theme={theme} key={item.id}>
@@ -298,7 +300,7 @@ export const TransferList = createPolymorphicComponent<
         </WrapperListStyled>
       </WrapperItemStyled>
       <Stack direction="column" spacing={10}>
-        {!isDisabledBtnAll && (
+        {!isShowSelectAll && (
           <IconButton
             variant="outlined"
             onClick={handleAllRight}
@@ -316,7 +318,7 @@ export const TransferList = createPolymorphicComponent<
         >
           <IconChevronRight size={18} />
         </IconButton>
-        {!isDisabledBtnAll && (
+        {!isShowSelectAll && (
           <IconButton
             variant="outlined"
             onClick={handleAllLeft}
@@ -336,7 +338,7 @@ export const TransferList = createPolymorphicComponent<
         </IconButton>
       </Stack>
       <WrapperItemStyled theme={theme}>
-        {!isDisabledBtnAll && (
+        {!isShowSelectAll ? (
           <>
             <ItemStyled theme={theme}>
               <Checkbox
@@ -348,12 +350,12 @@ export const TransferList = createPolymorphicComponent<
                 value={"ALL_RIGHT"}
                 disabled={right.length == 0}
                 onChange={handleOnChangeAllRightChecked}
-                label={`${listChecked.right.length}/${right.length} ${title}`}
+                label={`${isShowItemPerTotal ? listChecked.right.length + "/" + right.length : ""} ${title}`}
               />
             </ItemStyled>
             <Divider />
           </>
-        )}
+        ) : null}
         <WrapperListStyled theme={theme}>
           {right.map((item) => (
             <ItemStyled theme={theme} key={item.id}>

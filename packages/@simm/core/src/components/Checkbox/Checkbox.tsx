@@ -126,6 +126,8 @@ const CheckboxInputStyled = styled(Box)<CheckboxProps>((props) => {
     borderRadius: "4px",
     transition: "background .2s",
     ":checked": {
+      transform:"scale(1)",
+      opacity: "1",
       border: `1px solid ${color}`,
       ...(variant !== "outlined" && { backgroundColor: color }),
     },
