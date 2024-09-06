@@ -42,6 +42,8 @@ const CheckboxCheckedStyled = styled(CheckboxTransition)<CheckboxProps>(({
     left: 0,
     justifyContent: "center",
     alignItems: "center",
+    opacity: 1,
+    transform: "scale(1)",
     ...getStylesBySize(size).root,
   } as CSSObject;
 });
@@ -126,8 +128,6 @@ const CheckboxInputStyled = styled(Box)<CheckboxProps>((props) => {
     borderRadius: "4px",
     transition: "background .2s",
     ":checked": {
-      transform:"scale(1)",
-      opacity: "1",
       border: `1px solid ${color}`,
       ...(variant !== "outlined" && { backgroundColor: color }),
     },

@@ -3,7 +3,7 @@ import { TransferList } from "./TransferList";
 
 export default {
   component: TransferList,
-  title: "Typography/TransferList",
+  title: "Data/TransferList",
   tags: ["core"],
 };
 
@@ -12,7 +12,7 @@ export function Default() {
     <>
       <Stack spacing={10} sx={{ maxWidth: "500px" }}>
         <TransferList
-          isDisabledBtnAll={true}
+          isShowSelectAll={true}
           listLeft={[
             {
               label: "Item 1",
@@ -46,6 +46,7 @@ export function Default() {
       <Stack spacing={10} sx={{ maxWidth: "500px", marginTop: "20px" }}>
         <TransferList
           isDisabledBtnAll={false}
+          isShowItemPerTotal={true}
           listLeft={[
             {
               label: "Item 1",
