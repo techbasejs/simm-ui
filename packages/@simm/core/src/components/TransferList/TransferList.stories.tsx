@@ -29,8 +29,17 @@ export function Default() {
             value: "4",
           },
         ]}
-        listRight={[]}
-        title="List title"
+        listRight={[
+          {
+            label: "Item 6",
+            value: "6",
+          },
+          {
+            label: "Item 7",
+            value: "7",
+          },
+        ]}
+        title="All"
       ></TransferList>
     </Stack>
   );
