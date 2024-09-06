@@ -42,7 +42,7 @@ const WrapperListStyled = styled.div<{ theme: UseThemeProps }>(({ theme }) => ({
   fontFamily: theme.typography?.fontFamily,
   color: theme.typography?.color,
   minWidth: "200px",
-  maxHeight: "230px",
+  minHeight: "230px",
   overflow: "auto",
 }));
 
@@ -67,7 +67,7 @@ const ItemStyled = styled.div<{ theme: UseThemeProps }>(({ theme }) => ({
 const WrapperTransferList = styled.div(() => ({
   margin: 0,
   display: "flex",
-  alignItems: "baseline",
+  alignItems: "center",
   justifyContent: "space-between",
 }));
 
@@ -267,19 +267,23 @@ export const TransferList = createPolymorphicComponent<
   return (
     <WrapperTransferList ref={ref}>
       <WrapperItemStyled theme={theme}>
-        <ItemStyled theme={theme}>
-          <Checkbox
-            disabled={left.length == 0}
-            checked={
-              !checkAllLeft ||
-              (listChecked.left.length == left.length && left.length > 0)
-            }
-            onChange={(e) => handleOnChangeAllLeftChecked(e)}
-            value={"ALL_LEFT"}
-            label={`${listChecked.left.length}/${left.length} ${title}`}
-          />
-        </ItemStyled>
-        <Divider />
+        {!isDisabledBtnAll && (
+          <>
+            <ItemStyled theme={theme}>
+              <Checkbox
+                disabled={left.length == 0}
+                checked={
+                  !checkAllLeft ||
+                  (listChecked.left.length == left.length && left.length > 0)
+                }
+                onChange={(e) => handleOnChangeAllLeftChecked(e)}
+                value={"ALL_LEFT"}
+                label={`${listChecked.left.length}/${left.length} ${title}`}
+              />
+            </ItemStyled>
+            <Divider />
+          </>
+        )}
         <WrapperListStyled theme={theme}>
           {left.map((item) => (
             <ItemStyled theme={theme} key={item.id}>
@@ -332,19 +336,24 @@ export const TransferList = createPolymorphicComponent<
         </IconButton>
       </Stack>
       <WrapperItemStyled theme={theme}>
-        <ItemStyled theme={theme}>
-          <Checkbox
-            checked={
-              (!checkAllRight || listChecked.right.length == right.length) &&
-              right.length > 0
-            }
-            value={"ALL_RIGHT"}
-            disabled={right.length == 0}
-            onChange={handleOnChangeAllRightChecked}
-            label={`${listChecked.right.length}/${right.length} ${title}`}
-          />
-        </ItemStyled>
-        <Divider />
+        {!isDisabledBtnAll && (
+          <>
+            <ItemStyled theme={theme}>
+              <Checkbox
+                checked={
+                  (!checkAllRight ||
+                    listChecked.right.length == right.length) &&
+                  right.length > 0
+                }
+                value={"ALL_RIGHT"}
+                disabled={right.length == 0}
+                onChange={handleOnChangeAllRightChecked}
+                label={`${listChecked.right.length}/${right.length} ${title}`}
+              />
+            </ItemStyled>
+            <Divider />
+          </>
+        )}
         <WrapperListStyled theme={theme}>
           {right.map((item) => (
             <ItemStyled theme={theme} key={item.id}>
