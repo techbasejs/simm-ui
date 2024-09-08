@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { IconChevronDown } from "@tabler/icons-react";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useTheme } from "../../theme";
+import { Transition } from "../Transition/Transition";
 
 const StyledUl = styled.ul(() => {
   return {
@@ -123,8 +124,6 @@ export function AccordionItem({
 
   const open = selected.includes(value);
 
-  const ref = useRef<HTMLDivElement>(null);
-
   const handleClick = () => {
     if (!disabledKeys.includes(value)) {
       if (selectionMode === "single") {
@@ -148,16 +147,13 @@ export function AccordionItem({
         </StyledWrapperSubtitle>
         <StyledIcon size={16} open={open} />
       </StyledHeader>
-      <div
-        style={{
-          height: open ? ref.current?.offsetHeight || "auto" : 0,
-          overflowY: "hidden",
-        }}
-      >
-        <div ref={ref} style={{ padding: "2px", paddingBottom: "4px" }}>
-          {children}
+      <Transition opened={open} duration={200} exitDelay={200}>
+        <div style={{ overflowY: "hidden" }}>
+          <div style={{ padding: "2px", paddingBottom: "4px" }}>
+            {children}
+          </div>
         </div>
-      </div>
+      </Transition>
     </StyledLi>
   );
 }
