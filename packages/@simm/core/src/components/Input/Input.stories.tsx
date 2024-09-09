@@ -15,10 +15,11 @@ export function Default() {
     <Stack spacing={20}>
       <Stack direction="row">
         <Text>Input default</Text>
-        <Input placeholder="Input placeholder" />
+        <Input placeholder="Input placeholder" allowClear />
       </Stack>
       <Stack direction="row">
         <Input
+          allowClear
           prefixIcon={<IconCheck size={18} />}
           suffixIcon={<IconCheck size={18} />}
           variant="filled"

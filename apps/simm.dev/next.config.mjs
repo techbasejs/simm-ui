@@ -13,6 +13,10 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["shiki"],
   },
+  output: 'export',
+  images: {
+    unoptimized: true,
+  }
   // Optionally, add any other Next.js config below
 };
 
