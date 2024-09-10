@@ -19,10 +19,6 @@ interface TransferListItemProps {
   value: string | number;
 }
 
-interface ItemPropsI extends TransferListItemProps {
-  id?: string | number;
-}
-
 export interface TransferListProps {
   listRight: TransferListItemProps[];
   listLeft: TransferListItemProps[];
@@ -31,6 +27,13 @@ export interface TransferListProps {
   isShowSelectAll?: boolean;
   isShowItemPerTotal?: boolean;
 }
+
+interface IListChecked {
+  left: TransferListItemProps[];
+  right: TransferListItemProps[];
+}
+
+type TypeChecked = "left" | "right";
 
 const WrapperItemStyled = styled.div<{ theme: UseThemeProps }>(({ theme }) => ({
   fontFamily: theme.typography?.fontFamily,
@@ -72,35 +75,20 @@ const WrapperTransferList = styled.div(() => ({
   justifyContent: "space-between",
 }));
 
-const createUuid = () => {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (a) {
-    const r = (new Date().getTime() + Math.random() * 16) % 16 | 0,
-      v = a == "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-};
-
 export const TransferList = createPolymorphicComponent<
   HTMLDivElement,
   TransferListProps
 >((props, ref) => {
   const { listLeft, listRight, title, isShowSelectAll, isShowItemPerTotal } =
     props;
-  const [listChecked, setListChecked] = useState<{
-    left: ItemPropsI[];
-    right: ItemPropsI[];
-  }>({
+
+  const [listChecked, setListChecked] = useState<IListChecked>({
     left: [],
     right: [],
   });
-  const [checkAllLeft, setCheckAllLeft] = useState(true);
-  const [checkAllRight, setCheckAllRight] = useState(true);
-  const [left, setLeft] = useState<ItemPropsI[]>(() =>
-    listLeft.map((item) => ({ ...item, id: createUuid() })),
-  );
-  const [right, setRight] = useState<ItemPropsI[]>(() =>
-    listRight.map((item) => ({ ...item, id: createUuid() })),
-  );
+
+  const [left, setLeft] = useState<TransferListItemProps[]>(listLeft);
+  const [right, setRight] = useState<TransferListItemProps[]>(listRight);
 
   const isDisabled = useMemo(() => {
     return {
@@ -109,10 +97,16 @@ export const TransferList = createPolymorphicComponent<
     };
   }, [listChecked, left, right]);
 
+  const updateList = (
+    from: TransferListItemProps[],
+    to: TransferListItemProps[],
+    checked: TransferListItemProps[],
+  ) => {
+    return [from.filter((item) => !checked.includes(item)), to.concat(checked)];
+  };
+
   const handleAllRight = () => {
     setRight(right.concat(left));
-    setCheckAllRight(true);
-    setCheckAllLeft(true);
     Promise.all([
       setLeft([]),
       setListChecked((prev) => {
@@ -124,92 +118,8 @@ export const TransferList = createPolymorphicComponent<
     ]);
   };
 
-  const handleCheckedRight = () => {
-    setRight(right.concat(listChecked.left));
-    setCheckAllRight(true);
-    setCheckAllLeft(true);
-
-    Promise.all([
-      setLeft((prev) => {
-        return prev.filter((item) => {
-          return !listChecked.left.includes(item);
-        });
-      }),
-      setListChecked((prev) => {
-        return {
-          ...prev,
-          left: [],
-        };
-      }),
-    ]);
-  };
-
-  const handleCheckedLeft = () => {
-    setLeft(left.concat(listChecked.right));
-    setCheckAllRight(true);
-    setCheckAllLeft(true);
-    Promise.all([
-      setRight((prev) => {
-        return prev.filter((item) => {
-          return !listChecked.right.includes(item);
-        });
-      }),
-      setListChecked((prev) => {
-        return {
-          ...prev,
-          right: [],
-        };
-      }),
-    ]);
-  };
-
-  const handleOnChangeChecked = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    item: ItemPropsI,
-    type: "Left" | "Right",
-  ) => {
-    if (e.target.checked) {
-      if (type === "Left") {
-        setListChecked((prev) => {
-          return {
-            ...prev,
-            left: [...prev.left, item],
-          };
-        });
-      }
-      if (type === "Right") {
-        setListChecked((prev) => {
-          return {
-            ...prev,
-            right: [...prev.right, item],
-          };
-        });
-      }
-    }
-    if (!e.target.checked) {
-      if (type === "Left") {
-        setListChecked((prev) => {
-          return {
-            ...prev,
-            left: prev.left.filter((i) => i.id !== item.id),
-          };
-        });
-      }
-      if (type === "Right") {
-        setListChecked((prev) => {
-          return {
-            ...prev,
-            right: prev.right.filter((i) => i.id !== item.id),
-          };
-        });
-      }
-    }
-  };
-
   const handleAllLeft = () => {
     setLeft(left.concat(right));
-    setCheckAllLeft(true);
-    setCheckAllRight(true);
     Promise.all([
       setRight([]),
       setListChecked((prev) => {
@@ -221,48 +131,38 @@ export const TransferList = createPolymorphicComponent<
     ]);
   };
 
-  const handleOnChangeAllLeftChecked = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (e.target.checked) {
-      setCheckAllLeft(false);
-      setListChecked((prev) => {
-        return {
-          ...prev,
-          left: [...left],
-        };
-      });
-    } else {
-      setCheckAllLeft(true);
-      setListChecked((prev) => {
-        return {
-          ...prev,
-          left: [],
-        };
-      });
-    }
+  const moveChecked = (from: TypeChecked, to: TypeChecked) => {
+    const [newFrom, newTo] = updateList(
+      from === "left" ? left : right,
+      from === "left" ? right : left,
+      listChecked[from],
+    );
+    from === "left" ? setLeft(newFrom) : setRight(newFrom);
+    from === "left" ? setRight(newTo) : setLeft(newTo);
+    setListChecked((prev) => ({ ...prev, [from]: [] }));
   };
 
-  const handleOnChangeAllRightChecked = (
+  const handleCheckedChange = (
     e: React.ChangeEvent<HTMLInputElement>,
+    item: TransferListItemProps,
+    type: TypeChecked,
   ) => {
-    if (e.target.checked) {
-      setCheckAllRight(false);
-      setListChecked((prev) => {
-        return {
-          ...prev,
-          right: [...right],
-        };
-      });
-    } else {
-      setCheckAllRight(true);
-      setListChecked((prev) => {
-        return {
-          ...prev,
-          right: [],
-        };
-      });
-    }
+    setListChecked((prev) => ({
+      ...prev,
+      [type]: e.target.checked
+        ? [...prev[type], item]
+        : prev[type].filter((checkedItem) => checkedItem !== item),
+    }));
+  };
+
+  const handleSelectAllChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: TypeChecked,
+  ) => {
+    setListChecked((prev) => ({
+      ...prev,
+      [type]: e.target.checked ? (type === "left" ? left : right) : [],
+    }));
   };
 
   const theme = useTheme();
@@ -275,10 +175,9 @@ export const TransferList = createPolymorphicComponent<
               <Checkbox
                 disabled={left.length == 0}
                 checked={
-                  !checkAllLeft ||
-                  (listChecked.left.length == left.length && left.length > 0)
+                  listChecked.left.length == left.length && left.length > 0
                 }
-                onChange={(e) => handleOnChangeAllLeftChecked(e)}
+                onChange={(e) => handleSelectAllChange(e, "left")}
                 value={"ALL_LEFT"}
                 label={`${isShowItemPerTotal ? listChecked.left.length + "/" + left.length : ""} ${title}`}
               />
@@ -287,12 +186,12 @@ export const TransferList = createPolymorphicComponent<
           </>
         ) : null}
         <WrapperListStyled theme={theme}>
-          {left.map((item) => (
-            <ItemStyled theme={theme} key={item.id}>
+          {left.map((item, index) => (
+            <ItemStyled theme={theme} key={index}>
               <Checkbox
-                checked={listChecked.left.some((value) => value.id === item.id)}
+                checked={listChecked.left.includes(item)}
                 value={item.value}
-                onChange={(e) => handleOnChangeChecked(e, item, "Left")}
+                onChange={(e) => handleCheckedChange(e, item, "left")}
                 label={item.label}
               />
             </ItemStyled>
@@ -313,7 +212,7 @@ export const TransferList = createPolymorphicComponent<
         )}
         <IconButton
           variant="outlined"
-          onClick={handleCheckedRight}
+          onClick={() => moveChecked("left", "right")}
           disabled={isDisabled.left}
         >
           <IconChevronRight size={18} />
@@ -331,7 +230,7 @@ export const TransferList = createPolymorphicComponent<
         )}
         <IconButton
           variant="outlined"
-          onClick={handleCheckedLeft}
+          onClick={() => moveChecked("right", "left")}
           disabled={isDisabled.right}
         >
           <IconChevronLeft size={18} />
@@ -343,13 +242,11 @@ export const TransferList = createPolymorphicComponent<
             <ItemStyled theme={theme}>
               <Checkbox
                 checked={
-                  (!checkAllRight ||
-                    listChecked.right.length == right.length) &&
-                  right.length > 0
+                  listChecked.right.length == right.length && right.length > 0
                 }
                 value={"ALL_RIGHT"}
                 disabled={right.length == 0}
-                onChange={handleOnChangeAllRightChecked}
+                onChange={(e) => handleSelectAllChange(e, "right")}
                 label={`${isShowItemPerTotal ? listChecked.right.length + "/" + right.length : ""} ${title}`}
               />
             </ItemStyled>
@@ -357,15 +254,13 @@ export const TransferList = createPolymorphicComponent<
           </>
         ) : null}
         <WrapperListStyled theme={theme}>
-          {right.map((item) => (
-            <ItemStyled theme={theme} key={item.id}>
+          {right.map((item, index) => (
+            <ItemStyled theme={theme} key={index}>
               <Checkbox
-                checked={listChecked.right.some(
-                  (value) => value.id === item.id,
-                )}
+                checked={listChecked.right.includes(item)}
                 value={item.value}
                 label={item.label}
-                onChange={(e) => handleOnChangeChecked(e, item, "Right")}
+                onChange={(e) => handleCheckedChange(e, item, "right")}
               />
             </ItemStyled>
           ))}
