@@ -24,5 +24,6 @@ export * from "./Divider";
 export * from "./Notification";
 export * from "./Blockquote";
 export * from "./Tabs";
+export * from "./Steps";
 export * from "./Breadcrumbs";
 export * from "./RubyText";
