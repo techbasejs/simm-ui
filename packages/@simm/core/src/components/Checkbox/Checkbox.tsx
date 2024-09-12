@@ -42,6 +42,8 @@ const CheckboxCheckedStyled = styled(CheckboxTransition)<CheckboxProps>(({
     left: 0,
     justifyContent: "center",
     alignItems: "center",
+    opacity: 1,
+    transform: "scale(1)",
     ...getStylesBySize(size).root,
   } as CSSObject;
 });
