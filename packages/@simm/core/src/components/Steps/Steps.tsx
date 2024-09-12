@@ -31,7 +31,7 @@ const StepsWrapper = styled.div<StepsProps>((props) => {
   return {
     display: "flex",
     flexDirection: direction === "vertical" ? "column" : "row",
-    gap: "16px",
+    gap: "1rem",
     width: "100%",
     alignItems: "flex-start",
   } as CSSObject;
@@ -62,7 +62,7 @@ const StepItemTail = styled.div<StepProps>(
             sm: 12,
             md: 14,
             lg: 16,
-          }[size as keyof typeof size]
+          }[size as keyof StepSizeType]
         : 0,
       marginLeft: horizontal
         ? 0
@@ -70,8 +70,8 @@ const StepItemTail = styled.div<StepProps>(
             sm: 12,
             md: 14,
             lg: 16,
-          }[size as keyof typeof size],
-    };
+          }[size as keyof StepSizeType],
+    } as CSSObject;
   },
 );
 

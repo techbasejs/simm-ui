@@ -16,6 +16,7 @@ export function Default() {
   const [current1, setCurrent1] = useState(1);
   const [current2, setCurrent2] = useState(1);
   const [current3, setCurrent3] = useState(1);
+  const [current4, setCurrent4] = useState(1);
 
   const renderStepIcon = (item: StepProps) => {
     return (
@@ -133,6 +134,18 @@ export function Default() {
             },
           ]}
         />
+      </Stack>
+      <Title>Use Step component :</Title>
+      <Stack direction="row" spacing={10}>
+        <Steps
+          current={current4}
+          onChange={(value) => setCurrent4(value)}
+          stepIconRender={renderStepIcon}
+        >
+          <Step title="step 1" description="This is a description." />
+          <Step title="step 2" description="This is a description." />
+          <Step title="step 3" description="This is a description." />
+        </Steps>
       </Stack>
     </Stack>
   );

@@ -54,6 +54,7 @@ export interface StepProps
   direction?: StepDirectionType;
   size?: StepSizeType;
   color?: ColorType;
+  tailStyle?: CSSProperties;
   onStepClick?: (index: number) => void;
   stepIconRender?: StepIconRender;
 }
@@ -86,12 +87,12 @@ const getStepIconSize = (size?: StepSizeType): CSSObject => {
   return {
     height: size
       ? typeof size === "number"
-        ? `${size}px`
+        ? `${size}rem`
         : sizes[size as keyof typeof sizes]
       : sizes.md,
     width: size
       ? typeof size === "number"
-        ? `${size}px`
+        ? `${size}rem`
         : sizes[size as keyof typeof sizes]
       : sizes.md,
   };
@@ -103,7 +104,7 @@ const StepItemWrapper = styled.div<StepProps>((props) => {
     position: "relative",
     display: "flex",
     overflow: "hidden",
-    gap: "8px",
+    gap: "0.5rem",
     alignItems: "flex-start",
   } as CSSObject;
 });
@@ -186,33 +187,71 @@ const LoadingWrapper = styled.span({
   svg: {
     animation: `${loadingSpin} 1s infinite linear`,
   },
-  marginInlineEnd: "16px",
+  marginInlineEnd: "1rem",
 });
 
 const StepItemContent = styled.div({
   display: "flex",
   flexDirection: "column",
-  gap: "4px",
+  gap: "4rem",
 } as CSSObject);
 
 const StepItemTitle = styled.div({
   position: "relative",
   display: "inline-block",
   fontSize: 16,
-  lineHeight: "32px",
+  lineHeight: "2rem",
 } as CSSObject);
 
 const StepItemSubtitle = styled.span({
   marginTop: 4,
   fontSize: 14,
   color: colors.gray[400],
-  marginLeft: "8px",
+  marginLeft: "0.5rem",
 } as CSSObject);
 
 const StepItemDescription = styled.div({
   fontSize: 14,
   color: colors.gray[600],
 } as CSSObject);
+
+const StepItemTail = styled.div<StepProps>(
+  ({ color = "primary", disabled, status, direction, size }) => {
+    const theme = useTheme();
+    const _color = theme.pallete?.[color];
+
+    const horizontal = direction === "horizontal";
+    const waitingOrProcess = status === "waiting" || status === "process";
+
+    return {
+      flex: horizontal ? 1 : "none",
+      width: horizontal ? "100%" : 3,
+      height: horizontal ? 3 : 50,
+      backgroundColor: waitingOrProcess
+        ? theme.pallete?.background?.disabled
+        : disabled
+          ? theme.pallete?.common?.disabled
+          : _color?.main,
+      minWidth: horizontal ? 30 : 0,
+      minHeight: horizontal ? 0 : 30,
+      borderRadius: 999,
+      marginTop: horizontal
+        ? {
+            sm: 12,
+            md: 14,
+            lg: 16,
+          }[size as keyof StepSizeType]
+        : 0,
+      marginLeft: horizontal
+        ? 0
+        : {
+            sm: 12,
+            md: 14,
+            lg: 16,
+          }[size as keyof StepSizeType],
+    } as CSSObject;
+  },
+);
 
 const Step: React.FC<StepProps> = (props) => {
   const {
@@ -225,6 +264,7 @@ const Step: React.FC<StepProps> = (props) => {
     hasIconDot,
     stepIndex,
     statusIcons,
+    tailStyle,
     stepIconRender,
     onStepClick,
     onClick,
@@ -284,28 +324,33 @@ const Step: React.FC<StepProps> = (props) => {
   };
 
   return (
-    <StepItemWrapper
-      {...restProps}
-      disabled={disabled ?? false}
-      onClick={onClick}
-      {...accessibilityProps}
-    >
-      {stepIconRender ? (
-        renderIconNode()
-      ) : (
-        <StepItemIcon>{renderIconNode()}</StepItemIcon>
-      )}
-
-      <StepItemContent>
-        <StepItemTitle>
-          {title}
-          {subTitle && <StepItemSubtitle>{subTitle}</StepItemSubtitle>}
-        </StepItemTitle>
-        {description && (
-          <StepItemDescription>{description}</StepItemDescription>
+    <>
+      <StepItemWrapper
+        {...restProps}
+        disabled={disabled ?? false}
+        onClick={onClick}
+        {...accessibilityProps}
+      >
+        {stepIconRender ? (
+          renderIconNode()
+        ) : (
+          <StepItemIcon>{renderIconNode()}</StepItemIcon>
         )}
-      </StepItemContent>
-    </StepItemWrapper>
+
+        <StepItemContent>
+          <StepItemTitle>
+            {title}
+            {subTitle && <StepItemSubtitle>{subTitle}</StepItemSubtitle>}
+          </StepItemTitle>
+          {description && (
+            <StepItemDescription>{description}</StepItemDescription>
+          )}
+        </StepItemContent>
+      </StepItemWrapper>
+      {index !== items.length - 1 && (
+        <StepItemTail style={tailStyle} {...restProps} />
+      )}
+    </>
   );
 };
 
